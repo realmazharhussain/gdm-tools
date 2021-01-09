@@ -32,10 +32,10 @@ cd gdm-tools
 
 gdm-tools depends on following package:
 
-1. GLib (Developer Edition)
-   it has different package names in different distros:
-   	Debian/Ubuntu: libglib2.0-dev
-   	Arch/Manjaro: glib2
+1. GLib (Developer Edition)\
+   it has different package names in different distros:\
+   	Debian/Ubuntu: libglib2.0-dev\
+   	Arch/Manjaro: glib2\
    	Fedora/CentOS: glib2-devel 
 
 You can install these dependencies using package manager on terminal. For example, on Debian, Ubuntu and derivatives, you will need to run the following command in order to install the dependencies
