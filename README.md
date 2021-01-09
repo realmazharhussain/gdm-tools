@@ -34,9 +34,9 @@ gdm-tools depends on following package:
 
 1. GLib (Developer Edition)\
    it has different package names in different distros:\
-   \tDebian/Ubuntu: libglib2.0-dev\
-   \tArch/Manjaro: glib2\
-   \tFedora/CentOS: glib2-devel 
+   Debian/Ubuntu: libglib2.0-dev\
+   Arch/Manjaro: glib2\
+   Fedora/CentOS: glib2-devel 
 
 You can install these dependencies using package manager on terminal. For example, on Debian, Ubuntu and derivatives, you will need to run the following command in order to install the dependencies
 
@@ -60,6 +60,20 @@ where option is one of the following:
 | :--------------- | :------------------------------------- |
 | -l, list         | List all available valid GDM themes    |
 | -s, set          | Set a specific theme and/or background |
+| -r, reset        | Reset everything to the original state |
 | -h, help, --help | Display a short help message           |
 | -e, examples     | Explain the commands with examples     |
+
+#### Examples:
+
+```bash
+gdm-theme list
+gdm-theme -s default ~/cat.jpg
+gdm-theme set Yaru-dark
+gdm-theme reset
+```
+
+## Contribute
+
+If you like the project and want to contribute, you can do so by providing feedback or directly contributing code to it. To provide feedback, you can open an issue on github. If you don't know how to do that you can email me directly at mmazharhussainkgb1145@gmail.com.
 
