@@ -10,7 +10,7 @@ This is a command-line program which provides a nice interface to set GDM theme 
 
 ## Installation
 
-Before installing this program, make sure you have installed all the dependencies stated below.
+Before installing this program, make sure you have installed all the dependencies stated below in **Dependencies** section.
 
 ### Method 1:
 
