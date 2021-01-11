@@ -12,9 +12,11 @@ tmpDir=/tmp/gdm-theme           # Directory for storing temprary files
 tempThemeDir=$tmpDir/theme      # Directory to temprarily store theme files for processing
 extractedDir=$tmpDir/extracted  # Directory to temprarily store theme files extracted from some gresource file
 gnomeShellDir=/usr/share/gnome-shell    # Directory that contains gnome-shell and GDM related files
-gdmGresourseFile=$gnomeShellDir/gnome-shell-theme.gresource # Gresource file to be used by GDM
+gdmGresourceFile=$gnomeShellDir/gnome-shell-theme.gresource # Gresource file to be used by GDM
 ubuntuGresourceFile=$gnomeShellDir/gdm3-theme.gresource     # Gresource file to be used by GDM on Ubuntu and derivatives
-gdmGresourseBackup=$gdmGresourseFile.original               # Backup of original/default GDM gresource file
+gdmGresourceBackup=$gdmGresourceFile.bak                    # Backup of original/default GDM gresource file
+gdmGresourceDefault=$gdmGresourceFile.default               # GDM gresource file to be used as the default theme
+deprecatedGresourceBackups=$gdmGresourceFile.original            # Files that were previously used as backup but now they don't
 gdmBackground=$gnomeShellDir/theme/gdm-background           # File to be used as GDM background
 gdm3css=/etc/alternatives/gdm3.css      # Symlink used by update-alternatives program to provide gdm3.css file
 gresource=gnome-shell-theme.gresource   # Short alias/name for a long file name
@@ -28,7 +30,7 @@ NewBgr="
 
 initFun(){
   case $1 in
-    -r | reset | -s | set )
+    -r | reset | -s | set | -b | backup )
       rootNeeded=true
     ;;
     *)
@@ -50,11 +52,11 @@ initFun(){
     # check if user has sudo installed
     if which sudo &> /dev/null; then
       # run this script with sudo
-      sudo $0 $*
+      sudo $0 "$@"
       exit $?
     elif which su &> /dev/null; then
       # run this script as root
-      su -c "$0 $*"
+      su -c "$0 $@"
       exit $?
     else
       echo "Plz, run this program as root" > /dev/stderr
@@ -71,12 +73,13 @@ help() {
   echo -en "gdm-theme: a program to change gnome login theme and background
 Usage: ${ProgName} <Option> [arguments]
 Options:
-  -l,list \t\t\t Lists available theme options
-  -s,set <theme> [image|none] \t Sets theme and optionaly background
-  -s,set -b,--background [image] Sets background image only
-  -r,reset \t\t\t Resets everything to default
-  -h,[--]help \t\t\t Prints this help message
-  -e,examples \t\t\t Explains this program with examples
+  -l,list \t\t\t List available theme options
+  -s,set <theme> [image|none] \t Set theme and optionaly background
+  -s,set -b,--background [image] Set background image only
+  -r,reset \t\t\t Reset everything to default
+  -b,backup {update|restore} \t Update/Restore backup of default theme
+  -h,[--]help \t\t\t Print this help message
+  -e,examples \t\t\t Explain this program with examples
 You can also run 'man $ProgName' for more detailed help
 "
 }
@@ -126,6 +129,18 @@ $ProgName -s --background none
 $ProgName -s -b none
     Any of the above commands will unset GDM background image without changing the theme
 
+$ProgName backup update
+$ProgName -b update
+$ProgName backup -u
+$ProgName -b -u
+    Will update the backup to the current version of default GDM theme
+
+$ProgName backup restore
+$ProgName -b restore
+$ProgName backup -r
+$ProgName -b -r
+    Will restore default GDM theme from backup
+
 $ProgName -r
 $ProgName reset
     Will reset everything back to the way it was before you ever run this program
@@ -149,36 +164,73 @@ pagedHelp() {
   fi
 }
 
-isDefaultGresourse() {
-  local targetGresourseFile
-  if [[ -z $1 || ! -f $1 ]]; then
-    targetGresourseFile=$gdmGresourseFile
+isDefaultGresource() {
+  local targetGresourceFile
+  if [ -z "$1" ]; then
+    targetGresourceFile=$gdmGresourceFile
+  elif [ -f "$1"  ]; then
+    targetGresourceFile="$1"
   else
-    targetGresourseFile=$1
+    echo "file '$1' not found"
+    return 10
   fi
-  [ -z $(gresource list $targetGresourseFile /org/gnome/shell/theme/$customThemeIdentity) ]
+  [ -z "$(gresource list $targetGresourceFile /org/gnome/shell/theme/$customThemeIdentity)" ]
   return $?
 }
 
 # This function will backup default gresource file if and only if it needs to be backed up
-backup() {
-  if isDefaultGresourse; then
-    cp $gdmGresourseFile $gdmGresourseBackup
-  fi
+auto_backup() {
+  local targetGdmGresource
+  for targetGdmGresource in $deprecatedGresourceBackups $gdmGresourceFile; do
+    if [ -f $targetGdmGresource ] && isDefaultGresource $targetGdmGresource; then
+      cp $targetGdmGresource $gdmGresourceDefault
+      [ ! -f $gdmGresourceBackup ] && cp $gdmGresourceDefault $gdmGresourceBackup
+    fi
+  done
+  rm -f $deprecatedGresourceBackups
+}
+
+backup_action() {
+  case $1 in 
+    -u | update)
+      if [ -f $gdmGresourceDefault ]; then
+        cp $gdmGresourceDefault $gdmGresourceBackup
+      elif isDefaultGresource $gdmGresourceFile; then
+        cp $gdmGresourceFile $gdmGresourceDefault
+        cp $gdmGresourceDefault $gdmGresourceBackup
+      else
+        echo Default GDM theme not found. > /dev/stderr
+        echo Backup cannot be updated. > /dev/stderr
+        return 1
+      fi
+    ;;
+    -r | restore)
+      if [ -f $gdmGresourceBackup ]; then
+        cp $gdmGresourceBackup $gdmGresourceDefault
+      else
+        echo no backup found to restore from > /dev/stderr
+        return 2
+      fi
+    ;;
+    *)
+      echo backup action not recogninzed > /dev/stderr
+      return 10
+    ;;
+  esac
 }
 
 reset() {
-  [ -f $gdmGresourseBackup ] && mv $gdmGresourseBackup $gdmGresourseFile
+  [ -f $gdmGresourceDefault ] && mv $gdmGresourceDefault $gdmGresourceFile
   [ -f $ubuntuGresourceFile ] && update-alternatives --auto gdm3-theme.gresource
   rm -f $gdmBackground
 }
 
 compile() {
-  local targetThemeShellDir=$1
-  if [[ ! -z $targetThemeShellDir && -d $targetThemeShellDir ]]; then
+  local targetThemeShellDir="$1"
+  if [[ ! -z $targetThemeShellDir && -d "$targetThemeShellDir" ]]; then
     rm -rf $tempThemeDir
     mkdir -p $tempThemeDir
-    cp -r $targetThemeShellDir/* $tempThemeDir
+    cp -r "$targetThemeShellDir"/* $tempThemeDir
   else
     return false
   fi
@@ -210,56 +262,63 @@ extract() {
 }
 
 list() {
+  local theme
   echo default
-  for theme in $(ls $ThemesDir); do
-    [ -f $ThemesDir/$theme/gnome-shell/gnome-shell.css ] && echo $theme
+  ls -1 $ThemesDir | while read theme; do
+    [ -f $ThemesDir/"$theme"/gnome-shell/gnome-shell.css ] && echo "$theme"
   done
 }
 
 set-background-image() {
-  if [ ! -z $image ]; then
-    if [ $image = none ]; then
+  if [ ! -z "$image" ]; then
+    if [ "$image" = none ]; then
       rm -f $gdmBackground
-    elif [ -f $image ]; then
-      cp $image $gdmBackground
+    elif [ -f "$image" ]; then
+      if file -b --mime-type "$image" | grep image/.* > /dev/null ; then
+        cp "$image" $gdmBackground
+      else
+        echo "'$image' is not an image file" > /dev/stderr
+        return 1
+      fi
     else
       echo "image '$image' not found" > /dev/stderr
       echo "GDM background was not changed" > /dev/stderr
+      return 10
     fi
   fi
 }
 
 set-alternatives() {
-  [ -f $ubuntuGresourceFile ] &&   update-alternatives --set gdm3-theme.gresource $gdmGresourseFile
+  [ -f $ubuntuGresourceFile ] &&   update-alternatives --set gdm3-theme.gresource $gdmGresourceFile
 }
 
 set-custom-theme() {
-  local targetThemeShellDir=$1
-  compile $targetThemeShellDir
-  cp $tempThemeDir/$gresource $gdmGresourseFile
+  local targetThemeShellDir="$1"
+  compile "$targetThemeShellDir"
+  cp $tempThemeDir/$gresource $gdmGresourceFile
   set-background-image
   set-alternatives
 }
 
 set-default-theme() {
-  extract $gdmGresourseBackup
+  extract $gdmGresourceDefault
   set-custom-theme $extractedDir
 }
 
 set-theme() {
-  theme=$1
-  image=$2
-  ThemeShellDir=$ThemesDir/$theme/gnome-shell
+  theme="$1"
+  image="$2"
+  ThemeShellDir=$ThemesDir/"$theme"/gnome-shell
   if [ "$theme" = 'default' ]; then
     set-default-theme
   elif [[ "$theme" = "-b" || "$theme" = "--background" ]]; then
-    if isDefaultGresourse; then
+    if isDefaultGresource; then
       set-default-theme
     else
       set-background-image
     fi
-  elif [ -f $ThemeShellDir/gnome-shell.css ]; then
-    set-custom-theme $ThemeShellDir
+  elif [ -f "$ThemeShellDir"/gnome-shell.css ]; then
+    set-custom-theme "$ThemeShellDir"
   else
     echo "'$theme' is not a valid GDM theme" > /dev/stderr
     exit 3
@@ -270,14 +329,17 @@ main() {
   initFun "$@"
   case $1 in
     -s | set)
-      backup    # Run intelligent backup before doing anything to the system
-      set-theme $2 $3
+      auto_backup    # Run intelligent backup before doing anything to the system
+      set-theme "$2" "$3"
     ;;
     -r | reset)
       reset
     ;;
     -l | list)
       list
+    ;;
+    -b | backup)
+      backup_action $2
     ;;
     -h | --help | help )
       help
@@ -292,4 +354,4 @@ main() {
   rm -rf $tmpDir
 }
 
-main $@
+main "$@"
