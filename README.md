@@ -64,14 +64,15 @@ gdm-theme {Option} [theme] [image]
 
 where option is one of the following:
 
-| Option           | Function                               |
-| :--------------- | :------------------------------------- |
-| -l, list         | List all available valid GDM themes    |
-| -s, set          | Set a specific theme and/or background |
-| -r, reset        | Reset everything to the original state |
-| -b, backup       | Manage backup of the default GDM theme |
-| -h, help, --help | Display a short help message           |
-| -e, examples     | Explain the commands with examples     |
+| Option           | Function                                       |
+| :--------------- | :--------------------------------------------- |
+| -l, list         | List all available valid GDM themes            |
+| -s, set          | Set a specific theme and/or background         |
+| -r, reset        | Reset everything to the original state         |
+| -b, backup       | Manage backup of the default GDM theme         |
+| -x, extract      | Extract default GDM theme for use inside gnome |
+| -h, help, --help | Display a short help message                   |
+| -e, examples     | Explain the commands with examples             |
 
 #### Examples:
 
