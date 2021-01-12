@@ -83,6 +83,7 @@ gdm-theme set Yaru-dark
 gdm-theme reset
 gdm-theme -b update
 gdm-theme backup restore
+gdm-theme extract
 ```
 
 ## FAQ:
