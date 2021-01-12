@@ -1,5 +1,5 @@
 #!/bin/bash
-currentDir=$(realpath $(dirname $0))
+currentDir=$(realpath "$(dirname "$0")")
 binDir="$root"/usr/local/bin
 manDir="$root"/usr/local/man
 
@@ -22,5 +22,5 @@ if [ $UID = '0' ]; then
   cp "$currentDir"/bin/* "$binDir"/
   echo done.
 else
-  sudo --preserve-env=root $0
+  sudo --preserve-env=root "$0"
 fi

@@ -8,6 +8,13 @@ Currently, it includes only gdm-theme tool.
 
 This is a command-line program which provides a nice interface to set GDM theme and background image.
 
+#### Features:
+
+- Set GDM theme and background
+- Manage backup of the default GDM theme
+- Extract default theme to be able to use it in weird gnome sessions such as Ubuntu
+- Reset everything to its original form
+
 ## Installation
 
 Before installing this program, make sure you have installed all the dependencies stated below in **Dependencies** section.
@@ -32,7 +39,8 @@ cd gdm-tools
 
 gdm-tools depends on following package:
 
-1. GLib (Developer Edition)\
+1. GLib (Developer Edition)
+   
    it has different package names in different distros:\
    Debian/Ubuntu: libglib2.0-dev\
    Arch/Manjaro: glib2\
@@ -61,6 +69,7 @@ where option is one of the following:
 | -l, list         | List all available valid GDM themes    |
 | -s, set          | Set a specific theme and/or background |
 | -r, reset        | Reset everything to the original state |
+| -b, backup       | Manage backup of the default GDM theme |
 | -h, help, --help | Display a short help message           |
 | -e, examples     | Explain the commands with examples     |
 
@@ -71,9 +80,23 @@ gdm-theme list
 gdm-theme -s default ~/cat.jpg
 gdm-theme set Yaru-dark
 gdm-theme reset
+gdm-theme -b update
+gdm-theme backup restore
 ```
+
+## FAQ:
+
+1. When I try to set default GDM theme using `gdm-theme` tool, it sets some other theme instead of the default theme. What should I do?
+
+   **Ans:** You should reinstall the package `gnome-shell-common` and then run `gdm-theme backup update`. This will fix the issue.
+
+2. Why does that happen?
+
+   **Ans:** That could happen if you use some other program to set GDM theme before using `gdm-theme` tool. More information is available in *WARNING* section of `gdm-theme(1)` man page. To read it, install `gdm-tools` and then run the command `man 1 gdm-theme` on the terminal. When man page shows up, type `/warning` and press enter. This will take you straight to the warning section of man page.
 
 ## Contribute
 
 If you like the project and want to contribute, you can do so by providing feedback or directly contributing code to it. To provide feedback, you can open an issue on github. If you don't know how to do that you can email me directly at mmazharhussainkgb1145@gmail.com.
+
+You can also contribute on [Patreon](https://www.patreon.com/mazharhussain).
 

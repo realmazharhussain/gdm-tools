@@ -6,17 +6,17 @@
 
 # Here are some variables to be used in the script
 
-ProgName=$(basename $0)         # Program's Name
+ProgName=$(basename "$0")       # Program's Name
 ThemesDir=/usr/share/themes     # Directory that contains themes
 tmpDir=/tmp/gdm-theme           # Directory for storing temprary files
 tempThemeDir=$tmpDir/theme      # Directory to temprarily store theme files for processing
-extractedDir=$tmpDir/extracted  # Directory to temprarily store theme files extracted from some gresource file
+tempExtractedDir=$tmpDir/extracted      # Directory to temprarily store theme files extracted from some gresource file
 gnomeShellDir=/usr/share/gnome-shell    # Directory that contains gnome-shell and GDM related files
 gdmGresourceFile=$gnomeShellDir/gnome-shell-theme.gresource # Gresource file to be used by GDM
 ubuntuGresourceFile=$gnomeShellDir/gdm3-theme.gresource     # Gresource file to be used by GDM on Ubuntu and derivatives
 gdmGresourceBackup=$gdmGresourceFile.bak                    # Backup of original/default GDM gresource file
 gdmGresourceDefault=$gdmGresourceFile.default               # GDM gresource file to be used as the default theme
-deprecatedGresourceBackups=$gdmGresourceFile.original            # Files that were previously used as backup but now they don't
+deprecatedGresourceBackups=$gdmGresourceFile.original       # Files that were previously used as backup but now they don't
 gdmBackground=$gnomeShellDir/theme/gdm-background           # File to be used as GDM background
 gdm3css=/etc/alternatives/gdm3.css      # Symlink used by update-alternatives program to provide gdm3.css file
 gresource=gnome-shell-theme.gresource   # Short alias/name for a long file name
@@ -29,9 +29,13 @@ NewBgr="
 }"
 
 initFun(){
+  local rootNeeded
   case $1 in
     -r | reset | -s | set | -b | backup )
       rootNeeded=true
+    ;;
+    -x | extract)
+      [ -z "$2" ] && rootNeeded=true
     ;;
     *)
       rootNeeded=false
@@ -52,7 +56,7 @@ initFun(){
     # check if user has sudo installed
     if which sudo &> /dev/null; then
       # run this script with sudo
-      sudo $0 "$@"
+      sudo "$0" "$@"
       exit $?
     elif which su &> /dev/null; then
       # run this script as root
@@ -78,7 +82,9 @@ Options:
   -s,set -b,--background [image] Set background image only
   -r,reset \t\t\t Reset everything to default
   -b,backup {update|restore} \t Update/Restore backup of default theme
+  -x,extract [location] \t Extract default theme to specified location
   -h,[--]help \t\t\t Print this help message
+  -m,manual \t\t\t Provide detailed help
   -e,examples \t\t\t Explain this program with examples
 You can also run 'man $ProgName' for more detailed help
 "
@@ -145,6 +151,14 @@ $ProgName -r
 $ProgName reset
     Will reset everything back to the way it was before you ever run this program
 
+$ProgName -x
+$ProgName extract
+    Will extract the default GDM theme to system-wide themes directory
+
+$ProgName -x ~/.themes
+$ProgName extract ~/,themes
+    Will extract the default GDM theme to '.themes' directory in your home folder
+
 $ProgName -e
 $ProgName examples
     Will print this 'examples' page
@@ -178,6 +192,18 @@ isDefaultGresource() {
   return $?
 }
 
+getDefaultGresource() {
+  if isDefaultGresource $gdmGresourceFile; then
+    echo $gdmGresourceFile
+  elif isDefaultGresource $gdmGresourceDefault; then
+    echo $gdmGresourceDefault
+  elif isDefaultGresource $gdmGresourceBackup; then
+    echo $gdmGresourceBackup
+  else
+    return 1
+  fi
+}
+
 # This function will backup default gresource file if and only if it needs to be backed up
 auto_backup() {
   local targetGdmGresource
@@ -193,10 +219,10 @@ auto_backup() {
 backup_action() {
   case $1 in 
     -u | update)
-      if [ -f $gdmGresourceDefault ]; then
-        cp $gdmGresourceDefault $gdmGresourceBackup
-      elif isDefaultGresource $gdmGresourceFile; then
+      if isDefaultGresource $gdmGresourceFile; then
         cp $gdmGresourceFile $gdmGresourceDefault
+        cp $gdmGresourceDefault $gdmGresourceBackup
+      elif [ -f $gdmGresourceDefault ]; then
         cp $gdmGresourceDefault $gdmGresourceBackup
       else
         echo Default GDM theme not found. > /dev/stderr
@@ -251,14 +277,38 @@ compile() {
 
 extract() {
   local gresourcefile=$1 r rDir
+  if [ ! -f "$gresourcefile" ]; then
+    echo "file '$gresourcefile' doesn't exist, so couldn't be extracted" > /dev/stderr
+    return 1
+  fi
   for r in $(gresource list $gresourcefile); do
     # correctly generate necessary folder structure from actual resource
     rDir=${r%/*}
     rDir=${rDir#'/org/gnome/shell/theme/'}
-    test ! -d "$extractedDir/$rDir" && mkdir -p "$extractedDir/$rDir"
+    test ! -d "$tempExtractedDir/$rDir" && mkdir -p "$tempExtractedDir/$rDir"
     # extract the resource to the folder
-    gresource extract $gresourcefile $r > $extractedDir/${r#'/org/gnome/shell/theme/'}
+    gresource extract $gresourcefile $r > $tempExtractedDir/${r#'/org/gnome/shell/theme/'}
   done
+}
+
+extract_default_theme() {
+  local extractedDir
+  if [ ! -z "$1" ]; then
+    extractedDir="$1"
+  else
+    extractedDir="$ThemesDir"
+  fi
+  local gresourceToExtract="$(getDefaultGresource)"
+  if [ ! -z "$gresourceToExtract" ]; then
+    local extractedShellDir="$extractedDir"/default-extracted/gnome-shell
+    extract "$gresourceToExtract"
+    rm -rf "$extractedDir"/default-extracted
+    mkdir -p "$extractedShellDir"
+    mv -T "$tempExtractedDir" "$extractedShellDir"
+  else
+    echo "default theme not found, cannot extract" > /dev/stderr
+    return 1
+  fi
 }
 
 list() {
@@ -341,14 +391,20 @@ main() {
     -b | backup)
       backup_action $2
     ;;
+    -x | extract)
+      extract_default_theme "$2"
+    ;;
     -h | --help | help )
       help
+    ;;
+    -m | manual)
+    man $ProgName
     ;;
     -e | examples)
       pagedHelp examples
     ;;
     *)
-      notRecognized $1
+      notRecognized "$1"
     ;;
   esac
   rm -rf $tmpDir
