@@ -29,19 +29,6 @@ NewBgr="
 }"
 
 initFun(){
-  local rootNeeded
-  case $1 in
-    -r | reset | -s | set | -b | backup )
-      rootNeeded=true
-    ;;
-    -x | extract)
-      [ -z "$2" ] && rootNeeded=true
-    ;;
-    *)
-      rootNeeded=false
-    ;;
-  esac
-
   case $1 in
     -s | set )
       if ! which glib-compile-resources gresource > /dev/null; then
@@ -51,20 +38,51 @@ initFun(){
     ;;
   esac
 
-  # Check if user is someone other than root
-  if [[ $UID != 0 && $rootNeeded = true ]]; then
-    # check if user has sudo installed
-    if which sudo &> /dev/null; then
-      # run this script with sudo
-      sudo "$0" "$@"
-      exit $?
-    elif which su &> /dev/null; then
-      # run this script as root
-      su -c "$0 $@"
-      exit $?
-    else
-      echo "Plz, run this program as root" > /dev/stderr
-      exit 1
+  if [ $UID != 0 ]; then
+    local rootNeeded
+    case $1 in
+      -r | reset | -s | set | -b | backup )
+        rootNeeded=true
+      ;;
+      -x | extract)
+        rootNeeded=true
+        if [ ! -z "$2" ];then
+          local dirToCheck="$(realpath -m "$2")"
+#          echo 1 $dirToCheck $rootNeeded
+#          read
+          while [[ "$dirToCheck" != "/" ]]; do
+            if [ -d "$dirToCheck" ]; then
+              if ls -dl "$dirToCheck" | grep -E "^.{7}rw|^.{10} +[[:digit:]]* +$USER" > /dev/null; then
+                rootNeeded=false
+              fi
+              break
+            else
+              dirToCheck="${dirToCheck%/*}"
+#              echo 2 $dirToCheck $rootNeeded
+#              read
+            fi
+          done
+        fi
+      ;;
+      *)
+        rootNeeded=false
+      ;;
+    esac
+
+    if [[ $rootNeeded = true ]]; then
+      # check if user has sudo installed
+      if which sudo &> /dev/null; then
+        # run this script with sudo
+        sudo "$0" "$@"
+        exit $?
+      elif which su &> /dev/null; then
+        # run this script as root
+        su -c "$0 $@"
+        exit $?
+      else
+        echo "Plz, run this program as root" > /dev/stderr
+        exit 1
+      fi
     fi
   fi
 }
