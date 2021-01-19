@@ -1,7 +1,8 @@
 #!/bin/bash
-currentDir=$(realpath "$(dirname "$0")")
+currentDir="$(realpath "$(dirname "$0")")"
 binDir="$root"/usr/local/bin
 manDir="$root"/usr/local/man
+fishComp="$root"/usr/local/share/fish/vendor_completions.d
 
 if ! which glib-compile-resources gresource > /dev/null; then
   if which apt > /dev/null; then
@@ -15,11 +16,12 @@ fi
 
 if [ $UID = '0' ]; then
   echo 'installing gdm-tools ...'
-  mkdir -p "$binDir" "$manDir"/man1
+  mkdir -p "$binDir" "$manDir"/man1 "$fishComp"
   gzip -fk "$currentDir"/man1/*
   mv "$currentDir"/man1/*.gz "$manDir"/man1/
   chmod +x "$currentDir"/bin/*
   cp "$currentDir"/bin/* "$binDir"/
+  cp "$currentDir"/completions/fish/* "$fishComp"
   echo done.
 else
   sudo --preserve-env=root "$0"
