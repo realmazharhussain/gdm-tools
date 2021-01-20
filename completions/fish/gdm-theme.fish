@@ -2,10 +2,10 @@ set -l all_subcmds -l list -s set -r reset -b backup -x extract -h --help help -
 set -l themelist (gdm-theme list)
 set -l backup_actions -u -r update restore
 
-complete -x -c gdm-theme -n "__fish_seen_subcommand_from set -s; and not __fish_seen_subcommand_from $themelist" -a "$themelist" -r -d "GDM Theme"
-complete -x -c gdm-theme -n "__fish_seen_subcommand_from set -s; and not __fish_seen_subcommand_from $themelist" -s b -l background -r -d "Set background"
+complete -x -c gdm-theme -n "__fish_seen_subcommand_from set -s; and not __fish_seen_subcommand_from $themelist -b --background" -a "$themelist" -r -d "GDM Theme"
+complete -x -c gdm-theme -n "__fish_seen_subcommand_from set -s; and not __fish_seen_subcommand_from $themelist -b --background" -a "-b --background" -r -d "Set background"
 #complete -c gdm-theme -n "__fish_seen_subcommand_from $themelist -b --background" -e -a "$themelist"
-complete -F -c gdm-theme -n "__fish_seen_subcommand_from $themelist -b --background" -a "none" -d "No background"
+complete -F -c gdm-theme -n "__fish_seen_subcommand_from set -s; and __fish_seen_subcommand_from $themelist -b --background" -a "none" -d "No background"
 complete -x -c gdm-theme -n "__fish_seen_subcommand_from backup -b; and not __fish_seen_subcommand_from $backup_actions" -a 'update' -d "Update Backup"
 complete -x -c gdm-theme -n "__fish_seen_subcommand_from backup -b; and not __fish_seen_subcommand_from $backup_actions" -s u -d "Update Backup"
 complete -x -c gdm-theme -n "__fish_seen_subcommand_from backup -b; and not __fish_seen_subcommand_from $backup_actions" -a "restore" -d "Restore Backup"
