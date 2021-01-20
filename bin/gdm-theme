@@ -271,12 +271,12 @@ reset() {
 
 compile() {
   local targetThemeShellDir="$1"
-  if [[ ! -z $targetThemeShellDir && -d "$targetThemeShellDir" ]]; then
+  if [[ ! -z "$targetThemeShellDir" && -d "$targetThemeShellDir" ]]; then
     rm -rf $tempThemeDir
     mkdir -p $tempThemeDir
     cp -r "$targetThemeShellDir"/* $tempThemeDir
   else
-    return false
+    return 1
   fi
   echo "${NewBgr}" >> $tempThemeDir/gnome-shell.css
   cp $tempThemeDir/gnome-shell.css $tempThemeDir/gdm3.css
@@ -370,7 +370,7 @@ set-custom-theme() {
 
 set-default-theme() {
   extract $gdmGresourceDefault
-  set-custom-theme $extractedDir
+  set-custom-theme $tempExtractedDir
 }
 
 set-theme() {
