@@ -299,7 +299,7 @@ extract() {
   for r in $(gresource list $gresourcefile); do
     # correctly generate necessary folder structure from actual resource
     rDir=${r%/*}
-    rDir=${rDir#'/org/gnome/shell/theme/'}
+    rDir=${rDir#'/org/gnome/shell/theme'}
     test ! -d "$tempExtractedDir/$rDir" && mkdir -p "$tempExtractedDir/$rDir"
     # extract the resource to the folder
     gresource extract $gresourcefile $r > $tempExtractedDir/${r#'/org/gnome/shell/theme/'}
