@@ -211,26 +211,23 @@ isDefaultGresource() {
 }
 
 getDefaultGresource() {
-  if isDefaultGresource $gdmGresourceFile; then
-    echo $gdmGresourceFile
-  elif isDefaultGresource $gdmGresourceDefault; then
-    echo $gdmGresourceDefault
-  elif isDefaultGresource $gdmGresourceBackup; then
-    echo $gdmGresourceBackup
-  else
-    return 1
-  fi
+  local gresourcefile
+  for gresourcefile in $gdmGresourceFile $gdmGresourceDefault $deprecatedGresourceBackups $gdmGresourceBackup; do
+    if isDefaultGresource $gresourcefile; then
+      echo $gresourcefile
+      return 0
+    fi
+  done
+  return 1
 }
 
 # This function will backup default gresource file if and only if it needs to be backed up
-auto_backup() {
-  local targetGdmGresource
-  for targetGdmGresource in $deprecatedGresourceBackups $gdmGresourceFile; do
-    if [ -f $targetGdmGresource ] && isDefaultGresource $targetGdmGresource; then
-      cp $targetGdmGresource $gdmGresourceDefault
-      [ ! -f $gdmGresourceBackup ] && cp $gdmGresourceDefault $gdmGresourceBackup
-    fi
-  done
+smart_backup() {
+  local gresourcefile=$(getDefaultGresource)
+  if [ ! -z "$gresourcefile" ]; then
+    [ $gresourcefile != $gdmGresourceDefault ] && cp $gresourcefile $gdmGresourceDefault
+    [ ! -f $gdmGresourceBackup ] && cp $gdmGresourceDefault $gdmGresourceBackup
+  fi
   rm -f $deprecatedGresourceBackups
 }
 
@@ -387,6 +384,12 @@ set-theme() {
     fi
   elif [ -f "$ThemeShellDir"/gnome-shell.css ]; then
     set-custom-theme "$ThemeShellDir"
+  elif [ -z "$theme" ]; then
+    select theme in $(list); do
+      echo setting "'$theme'" ...
+      set-theme "$theme"
+      break
+    done
   else
     echo "'$theme' is not a valid GDM theme" > /dev/stderr
     exit 3
@@ -397,7 +400,7 @@ main() {
   initFun "$@"
   case $1 in
     -s | set)
-      auto_backup    # Run intelligent backup before doing anything to the system
+      smart_backup    # Run intelligent backup before doing anything to the system
       set-theme "$2" "$3"
     ;;
     -r | reset)
