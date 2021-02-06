@@ -46,22 +46,11 @@ initFun(){
       ;;
       -x | extract)
         rootNeeded=true
-        if [ ! -z "$2" ];then
+        if [ -n "$2" ];then
           local dirToCheck="$(realpath -m "$2")"
-#          echo 1 $dirToCheck $rootNeeded
-#          read
-          while [[ "$dirToCheck" != "/" ]]; do
-            if [ -d "$dirToCheck" ]; then
-              if ls -dl "$dirToCheck" | grep -E "^.{7}rw|^.{10} +[[:digit:]]* +$USER" > /dev/null; then
-                rootNeeded=false
-              fi
-              break
-            else
-              dirToCheck="${dirToCheck%/*}"
-#              echo 2 $dirToCheck $rootNeeded
-#              read
-            fi
-          done
+          if mkdir -p "$dirToCheck" 2>/dev/null && [ -w "$dirToCheck" ]; then
+		  rootNeeded=false
+          fi
         fi
       ;;
       *)
