@@ -1,4 +1,5 @@
 # This file can be used to set variables used by gdm-theme
+# Use this file with caution. It may break program 'gdm-theme'.
 
 # Sometimes distros like Manjaro put the default gresource file with a different name
 # and put their custom/modified theme's gresource file as the default gresource file.
