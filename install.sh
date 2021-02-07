@@ -6,10 +6,9 @@ fishComp="$root"/usr/local/share/fish/vendor_completions.d
 confDir="$root"/etc/gdm-tools
 
 if ! which glib-compile-resources gresource > /dev/null; then
-  if which apt > /dev/null; then
-    sudo apt install libglib2.0-dev
-  else
-    echo "This script needs GLib (developer edition) in order to work. But it was not found." > /dev/stderr
+  if ! ( which apt &> /dev/null && sudo apt install libglib2.0-dev ); then
+    echo "This script needs GLib (developer edition) in order to work. But it is not installed." > /dev/stderr
+    echo "Please, install it first in order to install gdm-tools"
     echo "Its package name may be 'glib2', 'glib2-devel', 'libglib2.0-dev', or straight up 'glib', etc. depending on your distro."
     exit 1
   fi
