@@ -3,7 +3,7 @@
 
 # Sometimes distros like Manjaro put the default gresource file with a different name
 # and put their custom/modified theme's gresource file as the default gresource file.
-# Following variable tells gdm-theme to use provided gresource file instead of what is
-# present at the default location.
+# Following variable tells gdm-theme to use provided gresource file as default instead
+# of what is present at the default location.
 # On Manjaro it will be
 # defaultGresource=/usr/share/gnome-shell/gnome-shell-theme.gresource.old
