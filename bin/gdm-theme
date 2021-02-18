@@ -179,8 +179,15 @@ $ProgName extract
     Will extract the default GDM theme to system-wide themes directory
 
 $ProgName -x ~/.themes
+$ProgName -x ~/.themes default
 $ProgName extract ~/,themes
+$ProgName extract ~/.themes/ default
     Will extract the default GDM theme to '.themes' directory in your home folder
+
+$ProgName -x ~/.themes distro-default
+$ProgName extract ~/.themes/ distro-default
+    Will extract distro-default GDM theme to '.themes' directory in your home folder
+    (only in some cases)
 
 $ProgName -e
 $ProgName examples
