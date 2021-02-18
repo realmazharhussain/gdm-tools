@@ -253,17 +253,21 @@ smart_backup() {
   if [ "$customDefaultGresource" = true ]; then
     local sourceGresource="$(getDistroGresource)"
     local targetGresource="$distroDefaultGresourceFile"
-    local backupMsg="Distro-Default Theme Updated"
+    local themeName="Distro-Default"
   else
     local sourceGresource=$(getDefaultGresource)
     local targetGresource="$gdmGresourceAutoBackup"
-    local backupMsg="Default Theme Updated"
+    local themeName="Default"
   fi
   if [ -n "$sourceGresource" ]; then
     if [ "$sourceGresource" != "$targetGresource" ]; then
-      [ ! -f "$targetGresource" ] && local noMsg=true
+      if [ -f "$targetGresource" ]; then
+        local action=updated
+      else
+        local action=saved
+      fi
       cp "$sourceGresource" "$targetGresource"
-      [ "$noMsg" != true ] && echo "$backupMsg"
+      echo "$themeName theme $action"
     fi
     [ ! -f $gdmGresourceManualBackup ] && cp "$targetGresource" $gdmGresourceManualBackup
   fi
