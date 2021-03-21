@@ -1,9 +1,11 @@
 #!/bin/bash
 
-tmpDir='/tmp/gdm-tools/gnomeconf2gdm'
-conf='99-gnomeconf2gdm'
-confDir='/etc/dconf/db/gdm.d'
-profileDir='/etc/dconf/profile'
+mainTempDir='/tmp/gdm-tools'         # Temprary Directory for 'gdm-tools'
+tmpDir="$mainTempDir/gnomeconf2gdm"  # Temprary Directory for this script
+conf='99-gnomeconf2gdm'              # Name for the GDM configuration file
+confDir='/etc/dconf/db/gdm.d'        # Directory for GDM configuration file
+profileDir='/etc/dconf/profile'      # Directory for GDM DConf profile
+# Contents of GDM DConf profile
 profileData='user-db:user
 system-db:gdm
 file-db:/usr/share/gdm/greeter-dconf-defaults'
@@ -72,7 +74,8 @@ rootWork(){
 }
 
 cleanTemp(){
-  rm -rf "$tmpDir"
+  rm -rf "$tmpDir"/
+  rmdir "$mainTempDir" &> /dev/null
 }
 
 main(){
