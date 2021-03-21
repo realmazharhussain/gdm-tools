@@ -1,0 +1,92 @@
+#!/bin/bash
+
+tmpDir='/tmp/gdm-tools/gnomeconf2gdm'
+conf='99-gnomeconf2gdm'
+confDir='/etc/dconf/db/gdm.d'
+profileDir='/etc/dconf/profile'
+profileData='user-db:user
+system-db:gdm
+file-db:/usr/share/gdm/greeter-dconf-defaults'
+
+printValues() {
+  msgStart=$1
+  rawSchema=$2
+  schema=$(echo $rawSchema | tr / .)
+  msgEnd=$3
+  keys=$4
+  echo $msgStart
+  echo [$rawSchema]
+  echo $msgEnd
+  for key in $keys; do
+    echo -n "$key="
+    gsettings get $schema $key
+  done
+  echo
+}
+
+getValues(){
+  printValues '#---------Interface----------'\
+              'org/gnome/desktop/interface'\
+              '#----------------------------'\
+              'cursor-theme
+               icon-theme
+               show-battery-percentage
+               clock-show-weekday
+               clock-format'
+
+#  printValues '#-----Login Screen------'\
+#              'org/gnome/login-screen'\
+#              '#-----------------------'\
+#              'logo
+#               disable-user-list
+#               disable-restart-buttons
+#               banner-message-enable
+#               banner-message-text'
+
+  printValues '#---------------Touchpad----------------'\
+              'org/gnome/desktop/peripherals/touchpad'\
+              '#---------------------------------------'\
+              'speed
+               tap-to-click'
+
+  printValues '#-------------Night Light----------------'\
+              'org/gnome/settings-daemon/plugins/color'\
+              '#----------------------------------------'\
+              'night-light-enabled
+               night-light-temperature
+               night-light-schedule-automatic
+               night-light-schedule-from
+               night-light-schedule-to'
+}
+
+nonRootWork() {
+  mkdir -p $tmpDir
+  getValues > ${tmpDir}/${conf}
+}
+
+rootWork(){
+  sudo mkdir -p $profileDir $confDir
+  echo "$profileData" | sudo tee ${profileDir}/gdm > /dev/null
+  sudo mv -T ${tmpDir}/${conf} ${confDir}/${conf}
+  sudo dconf update
+}
+
+cleanTemp(){
+  rm -rf "$tmpDir"
+}
+
+main(){
+  if [ "$UID" != 0 ]; then
+    nonRootWork
+    rootWork
+    cleanTemp
+    echo Successful!
+  else
+    echo 'Please run as a non-root user'
+    status=1
+  fi
+}
+
+status=0
+main "$@"
+exit $status
