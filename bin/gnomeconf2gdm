@@ -20,15 +20,37 @@ Options:
   -h,help,--help	Print this help message'
 }
 
+printHeader() {
+  local schema="$1"
+  local name="$2"
+  local lenSchema="$(echo -n "$schema" | wc -m)"
+  local lenName="$(echo -n "$name" | wc -m)"
+  local lenDiff=$((lenSchema - lenName))
+  local lenDiffHalf=$((lenDiff / 2))
+  echo -n '#'
+  local i=1
+  [ $((lenDiff % 2)) = 1 ] && i=0
+  for ((;i<lenDiffHalf;i++)); do
+    echo -n '-'
+  done
+  echo -n " $name "
+  for ((i=0;i<lenDiffHalf;i++)); do
+    echo -n '-'
+  done
+  echo
+  echo "[$schema]"
+  echo -n "#"
+  for ((i=0;i<=lenSchema;i++)); do
+    echo -n "-"
+  done
+  echo
+}
 printValues() {
-  msgStart=$1
-  rawSchema=$2
-  schema=$(echo $rawSchema | tr / .)
-  msgEnd=$3
-  keys=$4
-  echo $msgStart
-  echo [$rawSchema]
-  echo $msgEnd
+  local name="$1"
+  local rawSchema=$2
+  local schema=$(echo $rawSchema | tr / .)
+  local keys="$3"
+  printHeader "$rawSchema" "$name"
   for key in $keys; do
     echo -n "$key="
     gsettings get $schema $key
@@ -37,33 +59,25 @@ printValues() {
 }
 
 getValues(){
-  printValues '#---------Interface----------'\
-              'org/gnome/desktop/interface'\
-              '#----------------------------'\
+  printValues 'Interface' 'org/gnome/desktop/interface'\
               'cursor-theme
                icon-theme
                show-battery-percentage
                clock-show-weekday
                clock-format'
 
-#  printValues '#-----Login Screen------'\
-#              'org/gnome/login-screen'\
-#              '#-----------------------'\
+#  printValues 'Login Screen' 'org/gnome/login-screen'\
 #              'logo
 #               disable-user-list
 #               disable-restart-buttons
 #               banner-message-enable
 #               banner-message-text'
 
-  printValues '#---------------Touchpad----------------'\
-              'org/gnome/desktop/peripherals/touchpad'\
-              '#---------------------------------------'\
+  printValues 'Touchpad' 'org/gnome/desktop/peripherals/touchpad'\
               'speed
                tap-to-click'
 
-  printValues '#-------------Night Light----------------'\
-              'org/gnome/settings-daemon/plugins/color'\
-              '#----------------------------------------'\
+  printValues 'Night Light' 'org/gnome/settings-daemon/plugins/color'\
               'night-light-enabled
                night-light-temperature
                night-light-schedule-automatic
