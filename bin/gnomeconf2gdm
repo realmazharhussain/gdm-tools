@@ -28,9 +28,8 @@ printHeader() {
   local lenDiff=$((lenSchema - lenName))
   local lenDiffHalf=$((lenDiff / 2))
   echo -n '#'
-  local i=1
-  [ $((lenDiff % 2)) = 1 ] && i=0
-  for ((;i<lenDiffHalf;i++)); do
+  local i
+  for ((i=$((1-(lenDiff%2)));i<lenDiffHalf;i++)); do
     echo -n '-'
   done
   echo -n " $name "
