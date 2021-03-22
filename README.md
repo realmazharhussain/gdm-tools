@@ -34,7 +34,7 @@ First, make sure you have installed git. On Debian-like systems that can be done
 Then, run following commands in terminal.
 
 ```bash
-git clone https://github.com/realmazharhussain/gdm-tools.git
+git clone --depth=1 https://github.com/realmazharhussain/gdm-tools.git
 cd gdm-tools
 ./install.sh
 ```
@@ -57,11 +57,21 @@ gdm-tools depends on following package:
    Arch/Manjaro: dconf\
    Fedora/CentOS: dconf
 
-You can install these dependencies using package manager on terminal. For example, on Debian, Ubuntu and derivatives, you will need to run the following command in order to install the dependencies
+You can install these dependencies using package manager on terminal.
+
+For example, on Debian, Ubuntu and derivatives, you will need to run the following command in order to install the dependencies
 
 ```bash
 sudo apt install libglib2.0-dev dconf-cli
 ```
+
+On Arch/Manjaro
+
+```bash
+sudo pacman -S glib2 dconf 
+```
+
+
 
 ## Usage
 
