@@ -6,17 +6,31 @@ fishComp="$root"/usr/local/share/fish/vendor_completions.d
 confDir="$root"/etc/gdm-tools
 
 depMsg() {
-    echo "This script needs GLib (developer edition) in order to work. But it is not installed." > /dev/stderr
+    echo "This script needs '$depName' in order to work. But it is not installed." > /dev/stderr
     echo "Please, install it first in order to install gdm-tools"
-    echo "Its package name may be 'glib2', 'glib2-devel', 'libglib2.0-dev', or straight up 'glib', etc. depending on your distro."
+    echo "Its package name may be $pkgNames depending on your distro."
     exit 1
 }
 
 if ! which glib-compile-resources gresource &> /dev/null; then
+  depName='GLib (developer edition)'
+  pkgNames="'glib2', 'glib2-devel', 'libglib2.0-dev', or straight up 'glib', etc. "
   if which apt &> /dev/null; then
     sudo apt install libglib2.0-dev || depMsg
   elif which pacman &> /dev/null; then
     sudo pacman -S glib2 || depMsg
+  else
+    depMsg
+  fi
+fi
+
+if ! which dconf &> /dev/null; then
+  depName='DConf (CommandLine Version)'
+  pkgNames="'dconf-cli', or 'dconf'"
+  if which apt &> /dev/null; then
+    sudo apt install dconf-cli || depMsg
+  elif which pacman &> /dev/null; then
+    sudo pacman -S dconf || depMsg
   else
     depMsg
   fi

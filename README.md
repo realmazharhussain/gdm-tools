@@ -2,7 +2,11 @@
 
 This is a set of tools for Gnome's Display/Login Manager (GDM).
 
-Currently, it includes only gdm-theme tool.
+Currently, it includes only 'gdm-theme' tool and 'gnomeconf2gdm'.
+
+## gnomeconf2gdm
+
+A script that gets Settings from Gnome Desktop and applies them to GDM
 
 ## gdm-theme
 
@@ -15,7 +19,7 @@ This is a command-line program which provides a nice interface to set GDM theme 
 - Extract default theme to be able to use it in weird gnome sessions such as Ubuntu
 - Reset everything to its original form
 
-## Installation
+# Installation
 
 Before installing this program, make sure you have installed all the dependencies stated below in **Dependencies** section.
 
@@ -39,20 +43,43 @@ cd gdm-tools
 
 gdm-tools depends on following package:
 
-1. GLib (Developer Edition)
-   
-   it has different package names in different distros:\
+1. GLib 2.0 (Developer Edition)
+
+   it has different package names in different distros\
    Debian/Ubuntu: libglib2.0-dev\
    Arch/Manjaro: glib2\
    Fedora/CentOS: glib2-devel 
 
+2. DConf (Command-Line Version)
+
+   it has different package names in different distros\
+   Debian/Ubuntu: dconf-cli\
+   Arch/Manjaro: dconf\
+   Fedora/CentOS: dconf
+
 You can install these dependencies using package manager on terminal. For example, on Debian, Ubuntu and derivatives, you will need to run the following command in order to install the dependencies
 
 ```bash
-sudo apt install libglib2.0-dev
+sudo apt install libglib2.0-dev dconf-cli
 ```
 
 ## Usage
+
+### gnomeconf2gdm
+
+gnomeconf2gdm can be used as follows:
+
+```bash
+gnomeconf2gdm [option]
+```
+
+where option is one of the following:
+
+| Option           | Function                      |
+| ---------------- | ----------------------------- |
+| {no option}      | Apply settings to GDM         |
+| -r, reset        | Reset GDM settings to default |
+| -h, help, --help | Show help message             |
 
 ### gdm-theme
 
@@ -78,6 +105,7 @@ where option is one of the following:
 
 ```bash
 gdm-theme list
+gdm-theme set
 gdm-theme -s default ~/cat.jpg
 gdm-theme set Yaru-dark
 gdm-theme reset

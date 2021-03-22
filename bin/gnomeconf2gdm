@@ -10,6 +10,16 @@ profileData='user-db:user
 system-db:gdm
 file-db:/usr/share/gdm/greeter-dconf-defaults'
 
+help() {
+  echo 'gdm-tools: gnomeconf2gdm
+A script that gets Settings from Gnome Desktop and applies them to GDM
+Usage: gnomeconf2gdm [options]
+Options:
+  {no options}		Apply Settings to GDM
+  -r,reset 		Reset GDM settings to default
+  -h,help,--help	Print this help message'
+}
+
 printValues() {
   msgStart=$1
   rawSchema=$2
@@ -78,14 +88,38 @@ cleanTemp(){
   rmdir "$mainTempDir" &> /dev/null
 }
 
+reset(){
+  if [ -f "${confDir}/${conf}" ]; then
+    sudo rm ${confDir}/${conf}
+    sudo dconf update
+    echo "Settings restored"
+  else
+    echo "Already restored"
+  fi
+}
+
 main(){
   if [ "$UID" != 0 ]; then
-    nonRootWork
-    rootWork
-    cleanTemp
-    echo Successful!
+    case "$1" in
+    '')
+      nonRootWork
+      rootWork
+      cleanTemp
+      echo Successful!
+    ;;
+    reset | -r )
+      reset
+    ;;
+    help | --help | -h )
+      help
+    ;;
+    *)
+      echo "Please type 'gnomeconf2gdm -h' for help" > /dev/stderr
+      status=2
+    ;;
+    esac
   else
-    echo 'Please run as a non-root user'
+    echo 'Please run as a non-root user' > /dev/stderr
     status=1
   fi
 }
