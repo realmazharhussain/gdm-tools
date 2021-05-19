@@ -1,9 +1,34 @@
 #!/bin/bash
+[ -z "$DESTDIR" ] && DESTDIR=/
+[ -z "$PREFIX" ] && PREFIX="/usr/local"
+
 currentDir="$(realpath "$(dirname "$0")")"
-binDir="$root"/usr/local/bin
-manDir="$root"/usr/local/man
-fishComp="$root"/usr/local/share/fish/vendor_completions.d
-confDir="$root"/etc/gdm-tools
+binDir="$DESTDIR"/"$PREFIX"/bin
+manDir="$DESTDIR"/"$PREFIX"/man
+fishComp="$DESTDIR"/"$PREFIX"/share/fish/vendor_completions.d
+confDir="$DESTDIR"/etc/gdm-tools
+
+helpMsg(){
+  echo "Usage: [VAR]=[val]... ./install.sh"
+  echo "OR Usage: ./install.sh"
+  echo "This script respects two Environment Variables; DESTDIR, PREFIX."
+  echo -e "DESTDIR\t\tTarget Root Directory"
+  echo -e "PREFIX\t\tInstall Prefix e.g. /usr or /usr/local"
+}
+
+case "$1" in
+  -h|--help|h|help)
+    helpMsg
+    exit
+  ;;
+  '')
+    echo -n
+  ;;
+  *)
+    echo "Invalide option! Run './install.sh -h' for help."
+    exit 1
+  ;;
+esac
 
 depMsg() {
     echo "This script needs '$depName' in order to work. But it is not installed." > /dev/stderr
@@ -36,7 +61,13 @@ if ! which dconf &> /dev/null; then
   fi
 fi
 
-if [ $UID = '0' ]; then
+dir1ToCheck="$(realpath -m "$DESTDIR")"
+dir2ToCheck="$(realpath -m "$PREFIX")"
+if mkdir -p "$dir1ToCheck" "$dir1ToCheck"/"$dir2ToCheck" 2>/dev/null && [ -w "$dir1ToCheck" ] && [ -w "$dir1ToCheck"/"$dir2ToCheck" ]; then
+  rootNeeded=false
+fi
+
+if [ $UID = '0' ] || [ "$rootNeeded" = false ] ; then
   echo 'installing gdm-tools ...'
   mkdir -p "$binDir" "$manDir"/man1 "$fishComp" "$confDir"
   gzip -fk "$currentDir"/man1/*
@@ -47,5 +78,5 @@ if [ $UID = '0' ]; then
   cp -i "$currentDir"/config/* "$confDir"/
   echo done.
 else
-  sudo --preserve-env=root "$0"
+  sudo --preserve-env=DESTDIR,PREFIX "$0"
 fi
