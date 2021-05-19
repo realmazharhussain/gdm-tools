@@ -5,10 +5,10 @@
 
 
 # Here are some variables to be used in the script
+ProgName=$(basename "$0")       # Program's Name
 setVars(){
-  declare -g ProgName=$(basename "$0")       # Program's Name
   declare -g ThemesDir=/usr/share/themes     # Directory that contains themes
-  declare -g tmpDir=/tmp/gdm-theme           # Directory for storing temprary files
+  declare -g tmpDir=/tmp/gdm-tools/${ProgName}           # Directory for storing temprary files
   declare -g tempThemeDir=$tmpDir/theme      # Directory to temprarily store theme files for processing
   declare -g tempExtractedDir=$tmpDir/extracted      # Directory to temprarily store theme files extracted from some gresource file
   declare -g gnomeShellDir=/usr/share/gnome-shell    # Directory that contains gnome-shell and GDM related files
@@ -42,7 +42,7 @@ setVars(){
   fi
 }
 initFun(){
-  configFile=/etc/gdm-tools/gdm-theme
+  configFile=/etc/gdm-tools/${ProgName}
   [ -r $configFile ] && source $configFile
   setVars
   case $1 in
@@ -97,7 +97,7 @@ notRecognized() {
 }
 
 help() {
-  echo -en "gdm-theme: a program to change gnome login theme and background
+  echo -en "${ProgName}: a program to change gnome login theme and background
 Usage: ${ProgName} <Option> [arguments]
 Options:
   -l,list \t\t\t List available theme options
@@ -114,7 +114,7 @@ You can also run 'man $ProgName' for more detailed help
 }
 
 examples() {
-  echo -n "gdm-theme: a program to change gnome login theme and background
+  echo -n "${ProgName}: a program to change gnome login theme and background
 
 EXAMPLES:
 

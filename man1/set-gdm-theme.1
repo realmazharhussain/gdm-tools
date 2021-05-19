@@ -1,0 +1,116 @@
+.TH SET\-set\-gdm\-theme 1 2021\-01\-07 "Script v1.0" "GDM Tools"
+.SH NAME
+set\-gdm\-theme \- a utility to set GDM theme and background
+.SH SYNOPSIS
+\fBset\-gdm\-theme \-e\fR|\fB\-h\fR|\fB\-l\fR|\fB\-m\fR|\fB\-r\fR
+.sp
+\fBset\-gdm\-theme examples\fR|\fBhelp\fR|\fBlist\fR|\fBmanual\fR|\fBreset\fR
+.sp
+\fBset\-gdm\-theme \-s\fR|\fBset\fR [\fItheme\fR] [\fIimage\fR]
+.sp
+\fBset\-gdm\-theme \-b\fR|\fBbackup \-u\fR|\fBupdate\fR|\fB\-r\fR|\fBrestore\fR
+.sp
+\fBset\-gdm\-theme \-x\fR|\fBextract\fR [\fIlocation\fR] [\fBdefault\fR|\fBdistro\-default\fR]
+.SH DESCRIPTION
+List available theme options for Gnome Dislplay Manager (GDM), and set GDM theme and background image. A theme, to be a valid theme for this program, should be located in \fI/usr/share/themes/\fR and contain a subdirectory for \fIgnome-shell\fR. In simple words, a theme has to be a valid \fIgnome-shell\fR theme located in \fI/usr/share/themes\fR in order to be a valid GDM theme.
+.sp
+\fIset\-gdm\-theme(1)\fR has a smart backup system which backs up the default GDM theme (/usr/share/gnome-shell/gnome-shell-theme.gresource) because the file needs to be overwritten in order for other themes to be applied. It is a bit complicated and is discussed in detail in \fBWARNING\fR section.
+.SH OPTIONS
+.SS
+\fB\-l\fR,\fBlist\fR
+list available GDM themes. A theme has to be either the default \fIgnome-shell\fR theme or a valid \fIgnome-shell\fR theme stored in \fI/usr/share/themes\fR in order to show up in the list. A valid \fIgnome-shell\fR theme is a theme which has a subdirectory named \fIgnome-shell\fR with \fIgnome-shell.css\fR file present in it. This option will always show \fIdefault\fR theme as the first in the list.
+.
+.SS
+\fB-s\fR,\fBset \fR[\fItheme\fR] [\fIimage\fR]
+if provided, set [\fItheme\fR] as GDM theme and [\fIimage\fR] as GDM background image, where [\fItheme\fR] is the name of the theme and [\fIimage\fR] is path to an image file.
+.sp
+Your choices for theme are '\fBdefault\fR', all system-wide gnome-shell themes, and \fI-b\fR or \fI--background\fR. Your choices for an image are /path/to/image and '\fBnone\fR'. Both theme and image arguments are optional.
+.sp
+If you provide name of a theme, it will be set as GDM theme. If you type \fI-b\fR or \fI--background\fR instead of a theme name, only GDM background will change. Similarly, if you provide a path to an image file, it will be used as GDM background. If you type '\fBnone\fR' instead of path to an image file, GDM background image will be removed and the background will be set according to the theme (usually a solid color).
+.sp
+If you don't provide anything after \fB\-s\fR or \fBset\fR, \fIset\-gdm\-theme(1)\fR will provide you with a numbered list of all valid GDM themes on the system and you can choose a theme by typing its number. When you press Enter, \fIset\-gdm\-theme(1)\fR will set the theme with that number.
+.sp
+\fBExamples:\fR
+.sp
+\fBset\-gdm\-theme set \fIYaru\-dark\fR
+.RS
+will set \fIYaru-dark\fR as GDM theme
+.RE
+.
+\fBset\-gdm\-theme \-s default \fI~/Pictures/Sunset.jpg\fR
+.RS
+will set \fIdefault\fR GDM theme with \fI~/Pictures/Sunset.jpg\fR as background
+.RE
+.
+\fBset\-gdm\-theme set \-b \fI~/Pictures/Cat.jpg\fR
+.RS
+will set \fI~/Pictures/Cat.jpg\fR as GDM background
+.RE
+.
+\fBset\-gdm\-theme \-s \fIMateria \fBnone\fR
+.RS
+will set \fIMateria\fR as GDM theme with no background image
+.RE
+.
+\fBset\-gdm\-theme set
+.RS
+will provide you with a list of themes to choose from and then set what you choose
+.RE
+.
+.SS
+\fB\-r\fR,\fBreset\fR
+reset everything to the way it was before the use of \fIset\-gdm\-theme(1)\fR except for removing the backup it created. This option sets unmodified \fIdefault\fR GDM theme (\fI/usr/share/gnome-shell/gnome-shell-theme.gresource.default\fR) as GDM theme by moving it to its original place (\fI/usr/share/gnome-shell/gnome-shell-theme.gresource\fR), removes GDM background image file (/usr/share/gnome-shell/theme/gdm-background) which was created by \fIset\-gdm\-theme(1)\fR, and sets \fIset\-gdm\-theme.gresource\fR name in \fIupdate-alternatives(1)\fR to auto.
+.
+.SS
+\fB\-b\fR,\fBbackup \fR{\fIaction\fR}
+update or restore backup of the default GDM theme. This additional backup can be very helpful if some other program or a bug in \fBset\-gdm\-theme(1)\fR messes up the default GDM theme. This option requires at least one action. The action choices are \fBupdate\fR and \fBrestore\fR or their short forms \fB\-u\fR and \fB\-r\fR. For example,
+.sp
+\fBset\-gdm\-theme \-b update\fR
+.RS
+will update backup to the newest version of default GDM theme
+.RE
+.
+\fBset\-gdm\-theme backup \-r\fR
+.RS
+will restore default GDM theme from the backup
+.RE
+.
+.SS
+\fB\-x\fR,\fBextract\fR [\fIlocation\fR] [\fBdefault\fR|\fBdistro\-default\fR]
+extract the \fBdefault\fR or \fBdistro\-default\fR GDM theme to specified \fIlocation\R if provided. If no \fIlocation\fR is provided, it is extracted to system-wide themes directory \fI/usr/share/themes\fR. If a theme name ('\fBdefault\fR' or '\fBdistro\-default\fR') is provided after the location, provided theme is extracted to provided location. But, the 2nd argument to this option is practical only if your distro ships custom GDM theme as default and places actual default theme as something else (see /etc/gdm\-tools/set\-gdm\-theme).
+.sp
+This can be helpful when you use some \fIweird Gnome session\fR such as \fIubuntu-session\fR whose \fIdefault\fR gnome-shell theme is not the actual \fIdefault\fR gnome-shell theme provided by gnome. You cannot set \fIdefault\fR gnome-shell theme in \fIUbuntu\fR unless you install '\fIgnome-session\fR' and log in to \fIGnome (session)\fR instead of \fIUbuntu (session)\fR. With this option, you will be able to set gnome-shell theme to the actual \fIdefault\fR gnome-shell theme even when in \fIUbuntu (session)\fR. It will be presented as '\fIDefault-extracted\fR' in gnome-tweaks app.
+.
+.SS
+\fB\-h\fR,\fB\-\-help\fR,\fBhelp\fR
+print a short help message which provides program name, a short description of the program, and command options with a little description of each option too.
+.
+.SS
+\fB\-m\fR,\fBmanual\fR
+show this manual page
+.
+.SS
+\fB\-e\fR,\fBexamples\fR
+explain the usage of \fIset\-gdm\-theme(1)\fR with examples.
+.SH WARNING
+GDM uses the file /usr/share/gnome\-shell/gnome\-shell\-theme.gresource as its theme. We are going to call this file the 'default gresource file' for now. In order to set a theme as GDM theme, the \fIdefault\fR gresource file has to be replaced by the \fIcustom\fR theme's gresource file. The \fIdefault\fR gresource file has to be \fIbacked up\fR first if it is ever needed to be reused and it will surely be needed in future because user would want to set the default GDM theme at some point.
+.sp
+Other programs (that set and change GDM theme) \fIbackup\fR the \fIdefault\fR gresource file only on the first run if they \fIback\fR it \fIup\fR at all. When user sets \fIdefault\fR theme using any of those programs, they set that \fIbackup\fR as GDM theme. If Gnome gets upgraded, custom theme's gresource file is replaced with newer version of the \fIdefault\fR gresource file. Then you change GDM theme again to your preference. Since there is already a \fIbackup\fR present on the system, those programs do not \fIbackup\fR the newer version of \fIdefault\fR gresource file. Instead, they just replace it with a custom gresource file and keep using the old \fIbackup\fR as \fIdefault\fR theme. When a major version upgrade happens to Gnome, it breaks compatibility with older version of \fIdefault\fR theme. But those programs keep using the incompatible, old \fIbackup\fR of \fIdefault\fR theme(gresource file). In the end, their version of the default theme does not work correctly anymore.
+.sp
+To tackle the problem stated above, \fIset\-gdm\-theme(1)\fR uses a dual backup system i.e it keeps two backups of the default gresource. One backup is managed automatically by \fIset\-gdm\-theme(1)\fR (We will call it smart backup), and the other is created once on the first run and then managed manually with \fB-b\fR,\fBbackup\fR option of \fIset\-gdm\-theme(1)\fR (We will call it manual backup). Whenever the word "backup" is used without specifying the type, manual backup is intended.
+.sp
+Smart backup is used as 'default' GDM theme in \fIset\-gdm\-theme(1)\fR. \fIset\-gdm\-theme(1)\fR marks the theme it sets with a \fIspecial file\fR i.e. it packs the special file inside gresource file of that theme. The special file is used to distinguish a custom theme's gresource file from the \fIdefault\fR gresource file. So, if currently set gresource file does not have that \fIspecial file\fR, it is understood to be the \fIdefault\fR gresource file. Whenever \fIset\-gdm\-theme(1)\fR finds such a gresource file, it replaces the old \fIsmart backup\fR with that file. As a result, when \fIset\-gdm\-theme(1)\fR runs after an upgrade to Gnome, \fI smart backup\fR gets upgraded too. Therefore, the \fIsmart backup\fR is always up-to-date.
+.sp
+This \fIsmart backup\fR comes with its \fBlimitations\fR though. Since the other programs do not mark the theme they set with \fIspecial identification file\fR like \fIset\-gdm\-theme(1)\fR does, the file they replace default gresource with is recognized by \fIset\-gdm\-theme(1)\fR as a newer version of the \fIdefault\fR gresource file. Hence, it replaces the \fIsmart backup\fR with that file and the theme set by other program is treated as the \fIdefault\fR theme. In this situation, the command '\fBset\-gdm\-theme set \fIdefault\fR' will set that theme as GDM theme instead of the actual \fIdefault\fR GDM theme. Manual backup is present there to help in such situations.
+.sp
+To avoid this situation, you can opt to use only one program to set GDM theme instead of using multiple programs on the system. If you don't like the program you are currently using or want to check out some other program, then before using the new program, you should use the previous program to set the \fIdefault\fR GDM theme. The other thing you can do is to \fIbackup\fR the \fIdefault\fR gresource file by yourself before using any GDM theme changer. In this way, you will always have a \fIbackup\fR of the \fIdefault\fR GDM theme even if some program messes up its \fIbackup\fR. To do so, copy the default gresource file somewhere you won't accidently delete or forget. When some program messes up the \fIdefault\fR gresource file, you will just need to replace it with your own \fIbackup\fR. \fIset\-gdm\-theme(1)\fR will automatically detect that as \fIdefault\fR gresource file and everything will be fine again.
+.sp
+In case you used some other program to set GDM theme, then installed and used \fIset\-gdm\-theme(1)\fR to set GDM theme, now \fIset\-gdm\-theme(1)\fR sets some other theme when you try to set the \fIdefault\fR GDM theme, the other program does not provide any way to set the \fIdefault\fR GDM theme, and you never \fIbacked up\fR the \fIdefault\fR GDM theme manually; You can solve this problem by \fIreinstalling\fR the package '\fIgnome\-shell\-common\fR' and then updating \fIset\-gdm\-theme(1)\fR's backup by running '\fBset\-gdm\-theme -b update\fR'. This will \fIfix everything\fR. In debian/ubuntu and derivatives, you can reinstall '\fIgnome\-shell\-common\fR' by running the command '\fBsudo apt reinstall \fIgnome\-shell\-common\fR'.
+.sp
+However, if you only use \fIset\-gdm\-theme(1)\fR for changing GDM theme or background, no such problem is supposed to occur.
+.SH SEE ALSO
+\fBset\-gdm\-theme \fI\-\-help\fR
+.sp
+\fBset\-gdm\-theme \fIexamples\fR
+.sp
+\fB/etc/gdm\-tools/set\-gdm\-theme\fR

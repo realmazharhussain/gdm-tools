@@ -1,9 +1,9 @@
-# This file can be used to set variables used by gdm-theme
-# Use this file with caution. It may break program 'gdm-theme'.
+# This file can be used to set variables used by set-gdm-theme
+# Use this file with caution. It may break program 'set-gdm-theme'.
 
 # Sometimes distros like Manjaro put the default gresource file with a different name
 # and put their custom/modified theme's gresource file as the default gresource file.
-# Following variable tells gdm-theme to use provided gresource file as default instead
+# Following variable tells set-gdm-theme to use provided gresource file as default instead
 # of what is present at the default location.
-# On Manjaro it will be
+# On Manjaro (with Manjaro Branding) it will be
 # defaultGresource=/usr/share/gnome-shell/gnome-shell-theme.gresource.old

@@ -2,13 +2,13 @@
 
 This is a set of tools for Gnome's Display/Login Manager (GDM).
 
-Currently, it includes only 'gdm-theme' tool and 'gnomeconf2gdm'.
+Currently, it includes only 'set-gdm-theme' tool and 'gnomeconf2gdm'.
 
 ## gnomeconf2gdm
 
 A script that gets Settings from Gnome Desktop and applies them to GDM
 
-## gdm-theme
+## set-gdm-theme
 
 This is a command-line program which provides a nice interface to set GDM theme and background image.
 
@@ -41,7 +41,7 @@ cd gdm-tools
 
 ## Dependencies
 
-gdm-tools depends on following package:
+set-gdm-tools depends on following package:
 
 1. GLib 2.0 (Developer Edition)
 
@@ -91,12 +91,12 @@ where option is one of the following:
 | -r, reset        | Reset GDM settings to default |
 | -h, help, --help | Show help message             |
 
-### gdm-theme
+### set-gdm-theme
 
-You can use gdm-theme as follows:
+You can use set-gdm-theme as follows:
 
 ```bash
-gdm-theme {Option} [theme] [image]
+set-gdm-theme {Option} [theme] [image]
 ```
 
 where option is one of the following:
@@ -114,25 +114,25 @@ where option is one of the following:
 #### Examples:
 
 ```bash
-gdm-theme list
-gdm-theme set
-gdm-theme -s default ~/cat.jpg
-gdm-theme set Yaru-dark
-gdm-theme reset
-gdm-theme -b update
-gdm-theme backup restore
-gdm-theme extract
+set-gdm-theme list
+set-gdm-theme set
+set-gdm-theme -s default ~/cat.jpg
+set-gdm-theme set Yaru-dark
+set-gdm-theme reset
+set-gdm-theme -b update
+set-gdm-theme backup restore
+set-gdm-theme extract
 ```
 
 ## FAQ:
 
-1. When I try to set default GDM theme using `gdm-theme` tool, it sets some other theme instead of the default theme. What should I do?
+1. When I try to set default GDM theme using `set-gdm-theme` tool, it sets some other theme instead of the default theme. What should I do?
 
-   **Ans:** You should reinstall the package `gnome-shell-common` and then run `gdm-theme backup update`. This will fix the issue.
+   **Ans:** You should reinstall the package `gnome-shell-common` (if that's not available `gome-shell`) and then run `set-gdm-theme backup update`. This will fix the issue.
 
 2. Why does that happen?
 
-   **Ans:** That could happen if you use some other program to set GDM theme before using `gdm-theme` tool. More information is available in *WARNING* section of `gdm-theme(1)` man page. To read it, install `gdm-tools` and then run the command `man 1 gdm-theme` on the terminal. When man page shows up, type `/warning` and press enter. This will take you straight to the warning section of man page.
+   **Ans:** That could happen if you use some other program to set GDM theme before using `set-gdm-theme` tool. More information is available in *WARNING* section of `set-gdm-theme(1)` man page. To read it, install `gdm-tools` and then run the command `man 1 set-gdm-theme` on the terminal. When man page shows up, type `/warning` and press enter. This will take you straight to the warning section of man page.
 
 ## Contribute
 
