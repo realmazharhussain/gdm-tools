@@ -7,10 +7,11 @@
 # Here are some variables to be used in the script
 ProgName=$(basename "$0")       # Program's Name
 setVars(){
-  declare -g ThemesDir=/usr/share/themes     # Directory that contains themes
-  declare -g tmpDir=/tmp/gdm-tools/${ProgName}           # Directory for storing temprary files
-  declare -g tempThemeDir=$tmpDir/theme      # Directory to temprarily store theme files for processing
-  declare -g tempExtractedDir=$tmpDir/extracted      # Directory to temprarily store theme files extracted from some gresource file
+  declare -g ThemesDir=/usr/share/themes       # Directory that contains themes
+  declare -g MaintempDir=/tmp/gdm-tools/       # Directory for storing temprary files
+  declare -g tempDir=$MaintempDir/${ProgName}  # Directory for storing temprary files specific to this script
+  declare -g tempThemeDir=$tempDir/theme       # Directory to temprarily store theme files for processing
+  declare -g tempExtractedDir=$tempDir/extracted      # Directory to temprarily store theme files extracted from some gresource file
   declare -g gnomeShellDir=/usr/share/gnome-shell    # Directory that contains gnome-shell and GDM related files
   declare -g gdmGresourceFile=$gnomeShellDir/gnome-shell-theme.gresource # Gresource file to be used by GDM
   declare -g ubuntuGresourceFile=$gnomeShellDir/gdm3-theme.gresource     # Gresource file to be used by GDM on Ubuntu and derivatives
@@ -525,7 +526,8 @@ main() {
       notRecognized "$1"
     ;;
   esac
-  rm -rf $tmpDir
+  rm -rf $tempDir
+  rmdir $MaintempDir &>/dev/null
 }
 
 main "$@"
