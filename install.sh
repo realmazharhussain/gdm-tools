@@ -3,10 +3,10 @@
 [ -z "$PREFIX" ] && PREFIX="/usr/local"
 
 currentDir="$(realpath "$(dirname "$0")")"
-binDir="$DESTDIR"/"$PREFIX"/bin
-manDir="$DESTDIR"/"$PREFIX"/man
-fishComp="$DESTDIR"/"$PREFIX"/share/fish/vendor_completions.d
-confDir="$DESTDIR"/etc/gdm-tools
+binDir="$(realpath -m "$DESTDIR"/"$PREFIX"/bin)"
+manDir="$(realpath -m "$DESTDIR"/"$PREFIX"/man)"
+fishComp="$(realpath -m "$DESTDIR"/"$PREFIX"/share/fish/vendor_completions.d)"
+confDir="$(realpath -m "$DESTDIR"/etc/gdm-tools)"
 
 helpMsg(){
   echo "Usage: [VAR]=[val]... ./install.sh"
