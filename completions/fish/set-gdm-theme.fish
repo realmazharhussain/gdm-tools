@@ -1,5 +1,5 @@
 set -l all_subcmds -l list -s set -r reset -b backup -x extract -h --help help -m manual -e examples
-set -l themelist (gdm-theme list)
+set -l themelist (set-gdm-theme list)
 set -l backup_actions -u -r update restore
 
 complete -x -c set-gdm-theme -n "__fish_seen_subcommand_from set -s; and not __fish_seen_subcommand_from $themelist -b --background" -a "$themelist" -r -d "GDM Theme"
