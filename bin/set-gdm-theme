@@ -28,6 +28,9 @@ setVars(){
 #lockDialogGroup {
   background-image: url('file://$gdmBackground');
   background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center;
 }"
 
 
