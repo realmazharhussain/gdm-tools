@@ -108,9 +108,11 @@ To avoid this situation, you can opt to use only one program to set GDM theme in
 In case you used some other program to set GDM theme, then installed and used \fIset\-gdm\-theme(1)\fR to set GDM theme, now \fIset\-gdm\-theme(1)\fR sets some other theme when you try to set the \fIdefault\fR GDM theme, the other program does not provide any way to set the \fIdefault\fR GDM theme, and you never \fIbacked up\fR the \fIdefault\fR GDM theme manually; You can solve this problem by \fIreinstalling\fR the package '\fIgnome\-shell\-common\fR' and then updating \fIset\-gdm\-theme(1)\fR's backup by running '\fBset\-gdm\-theme -b update\fR'. This will \fIfix everything\fR. In debian/ubuntu and derivatives, you can reinstall '\fIgnome\-shell\-common\fR' by running the command '\fBsudo apt reinstall \fIgnome\-shell\-common\fR'.
 .sp
 However, if you only use \fIset\-gdm\-theme(1)\fR for changing GDM theme or background, no such problem is supposed to occur.
+.SH FILES
+\fB/etc/gdm\-tools/set\-gdm\-theme.conf\fR - The configuration file for set-gdm-theme command
+.sp
+\fB/etc/gdm\-tools/custom.css\fR - Custom CSS to apply to every theme before setting it as GDM theme
 .SH SEE ALSO
 \fBset\-gdm\-theme \fI\-\-help\fR
 .sp
 \fBset\-gdm\-theme \fIexamples\fR
-.sp
-\fB/etc/gdm\-tools/set\-gdm\-theme\fR
