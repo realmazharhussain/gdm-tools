@@ -3,14 +3,13 @@
 # This script compiles and sets given
 # gnome-shell theme as GDM3 theme
 
+bold=$(tput bold)          # make text bold
+underlined=$(tput smul)    # make text underlined
+normal=$(tput sgr0)        # restore text to normal
 
 # Here are some variables to be used in the script
 ProgName=$(basename "$0")       # Program's Name
 setVars(){
-  declare -g bold=$(tput bold)          # make text bold
-  declare -g underlined=$(tput smul)    # make text underlined
-  declare -g normal=$(tput sgr0)        # restore text to normal
-
   declare -g ThemesDir=/usr/share/themes       # Directory that contains themes
   declare -g MaintempDir=/tmp/gdm-tools/       # Directory for storing temprary files
   declare -g tempDir=$MaintempDir/${ProgName}  # Directory for storing temprary files specific to this script
