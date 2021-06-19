@@ -2,11 +2,11 @@
 .SH NAME
 set\-gdm\-theme \- a utility to set GDM theme and background
 .SH SYNOPSIS
-\fBset\-gdm\-theme \-e\fR|\fB\-h\fR|\fB\-l\fR|\fB\-m\fR|\fB\-r\fR
+\fBset\-gdm\-theme \-e\fR|\fB\-h\fR|\fB\-l\fR|\fB\-lc\fR|\fB\-m\fR|\fB\-r\fR
 .sp
-\fBset\-gdm\-theme examples\fR|\fBhelp\fR|\fBlist\fR|\fBmanual\fR|\fBreset\fR
+\fBset\-gdm\-theme examples\fR|\fBhelp\fR|\fBlist\fR|\fBlist\-colors\fR|\fBmanual\fR|\fBreset\fR
 .sp
-\fBset\-gdm\-theme \-s\fR|\fBset\fR [\fItheme\fR] [\fIimage\fR]
+\fBset\-gdm\-theme \-s\fR|\fBset\fR [\fItheme\fR] [\fIimage\fR|\fIcolor\fR]
 .sp
 \fBset\-gdm\-theme \-b\fR|\fBbackup \-u\fR|\fBupdate\fR|\fB\-r\fR|\fBrestore\fR
 .sp
@@ -21,10 +21,16 @@ List available theme options for Gnome Dislplay Manager (GDM), and set GDM theme
 list available GDM themes. A theme has to be either the default \fIgnome-shell\fR theme or a valid \fIgnome-shell\fR theme stored in \fI/usr/share/themes\fR in order to show up in the list. A valid \fIgnome-shell\fR theme is a theme which has a subdirectory named \fIgnome-shell\fR with \fIgnome-shell.css\fR file present in it. This option will always show \fIdefault\fR theme as the first in the list.
 .
 .SS
-\fB-s\fR,\fBset \fR[\fItheme\fR] [\fIimage\fR]
-if provided, set [\fItheme\fR] as GDM theme and [\fIimage\fR] as GDM background image, where [\fItheme\fR] is the name of the theme and [\fIimage\fR] is path to an image file.
+\fB\-lc\fR,\fBlist\-colors\fR
+list names of the colors that are accepted as GDM background.
+.
+.SS
+\fB-s\fR,\fBset \fR[\fItheme\fR] [\fIimage\fR|\fIcolor\fR]
+if provided, set [\fItheme\fR] as GDM theme and [\fIimage\fR] as GDM background image or [\fIcolor\fR] as GDM background, where [\fItheme\fR] is the name of the theme, [\fIimage\fR] is path to an image file and [\fIcolor\fR] is either the name of a color e.g. red, green, violet, etc or a color code like '#00F' or '#0a4d90' (qoutes are important).
 .sp
 Your choices for theme are '\fBdefault\fR', all system-wide gnome-shell themes, and \fI-b\fR or \fI--background\fR. Your choices for an image are /path/to/image and '\fBnone\fR'. Both theme and image arguments are optional.
+.sp
+A list of acceptable color names can be obtained by running '\fBset\-gdm\-theme list\-colors\R'.
 .sp
 If you provide name of a theme, it will be set as GDM theme. If you type \fI-b\fR or \fI--background\fR instead of a theme name, only GDM background will change. Similarly, if you provide a path to an image file, it will be used as GDM background. If you type '\fBnone\fR' instead of path to an image file, GDM background image will be removed and the background will be set according to the theme (usually a solid color).
 .sp
@@ -50,6 +56,16 @@ will set \fI~/Pictures/Cat.jpg\fR as GDM background
 \fBset\-gdm\-theme \-s \fIMateria \fBnone\fR
 .RS
 will set \fIMateria\fR as GDM theme with no background image
+.RE
+.
+\fBset\-gdm\-theme \-s \-b \fIblue\fR
+.RS
+will set GDM background to color 'blue'
+.RE
+.
+\fBset\-gdm\-theme \-s \-b '\fI#aa442d\fR'
+.RS
+will set GDM background to color with color-code '\fI#aa442d\fR'
 .RE
 .
 \fBset\-gdm\-theme set
