@@ -593,7 +593,7 @@ reset() {
     mv "$backupFile" "$gdmGresourceFile"
   fi
   [ -f $ubuntuGresourceFile ] && update-alternatives --auto gdm3-theme.gresource
-  rm -f $gdmBackground
+  rm -f $gdmBackground $currentThemeFile $currentBackgroundFile
   echo "Everything reset to default values"
 }
 
