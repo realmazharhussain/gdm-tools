@@ -7,7 +7,7 @@ complete -x -c set-gdm-theme -n "__fish_seen_subcommand_from set -s; and not __f
 complete -x -c set-gdm-theme -n "__fish_seen_subcommand_from set -s; and not __fish_seen_subcommand_from $themelist -b --background" -a "-b --background" -r -d "Change background only"
 #complete -c set-gdm-theme -n "__fish_seen_subcommand_from $themelist -b --background" -e -a "$themelist"
 complete -F -c set-gdm-theme -n "__fish_seen_subcommand_from set -s; and __fish_seen_subcommand_from $themelist -b --background" -a "none" -d "No background"
-complete -F -c set-gdm-theme -n "__fish_seen_subcommand_from set -s; and __fish_seen_subcommand_from $themelist -b --background" -a "$colorlist" -d "Color Name"
+complete -F -c set-gdm-theme -n "__fish_seen_subcommand_from set -s; and __fish_seen_subcommand_from $themelist -b --background" -a "$colorlist" -d "Background Color"
 complete -x -c set-gdm-theme -n "__fish_seen_subcommand_from backup -b; and not __fish_seen_subcommand_from $backup_actions -s set" -a 'update' -d "Update Backup"
 complete -x -c set-gdm-theme -n "__fish_seen_subcommand_from backup -b; and not __fish_seen_subcommand_from $backup_actions -s set" -s u -d "Update Backup"
 complete -x -c set-gdm-theme -n "__fish_seen_subcommand_from backup -b; and not __fish_seen_subcommand_from $backup_actions -s set" -a "restore" -d "Restore Backup"
