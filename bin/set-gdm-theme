@@ -698,7 +698,7 @@ set-background-image() {
       if file -b --mime-type "$image" | grep image/.* > /dev/null ; then
         cp "$image" $gdmBackground
         echo "Background image set to '$image'"
-        currentBackground="$image"
+        currentBackground=image
         saveCurrentBackground
       else
         echo "'$image' is not an image file" > /dev/stderr
