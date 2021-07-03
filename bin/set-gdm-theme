@@ -825,7 +825,6 @@ main() {
     ;;
   esac
   rm -rf $tempDir
-  rmdir $MaintempDir &>/dev/null
 }
 
 main "$@"
