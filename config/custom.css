@@ -1,4 +1,19 @@
 /* 
-You can put your custom CSS here. It will be appended
-to every theme before it gets set as GDM theme.
+ * You can put your custom CSS here. It will be appended
+ * to every theme before it gets set as GDM theme.
+ */
+
+/* To customize GDM top panel, uncomment the following
+ * and put your custom tags inside curly braces
+ */
+/*
+#panel.login-screen {
+}
+*/
+
+/* To customize GDM log-in screen, uncomment the following
+ * and put your custon tags inside curly braces
+ */
+/* #lockDialogGroup {
+}
 */
