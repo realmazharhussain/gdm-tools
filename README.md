@@ -138,11 +138,15 @@ set-gdm-theme extract
 
 ## FAQ:
 
-1. When I try to set default GDM theme using `set-gdm-theme` tool, it sets some other theme instead of the default theme. What should I do?
+1. Why can't I apply/set GDM themes downloaded from gnome-look.org or other pling.com like websites?
 
-   **Ans:** You should reinstall the package `gnome-shell-common` (if that's not available `gome-shell`) and then run `set-gdm-theme backup update`. This will fix the issue.
+   **Ans:** Themes available in `GDM Themes` section of those websites are for old versions of GDM and current versions of GDM don't use that kind of themes. Newer versions of GDM use a compiled gnome-shell theme as their theme. Download and install (system-wide) themes available in `Gnome Shell Themes` section of those websites. They will work on newer versions GDM and are supported by `set-gdm-theme` command.
 
-2. Why does that happen?
+2. When I try to set default GDM theme using `set-gdm-theme` tool, it sets some other theme instead of the default theme. What should I do?
+
+   **Ans:** You should reinstall the package `gnome-shell-common` (if that's not available `gome-shell`) and then run `set-gdm-theme backup update`. This should fix the issue.
+
+3. Why does that happen?
 
    **Ans:** That could happen if you use some other program to set GDM theme before using `set-gdm-theme` tool. More information is available in *WARNING* section of `set-gdm-theme(1)` man page. To read it, install `gdm-tools` and then run the command `man 1 set-gdm-theme` on the terminal. When man page shows up, type `/warning` and press enter. This will take you straight to the warning section of man page.
 
