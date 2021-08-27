@@ -733,7 +733,7 @@ set-custom-theme() {
 
 set-default-theme() {
   theme=default
-  extract "$defaultGresource"
+  extract "$gdmGresourceAutoBackup"
   set-custom-theme $tempExtractedDir
 }
 
