@@ -707,7 +707,7 @@ set-background-image() {
     elif contains "$image" "${colorNames[@]}" ||
          echo "$image" | grep -E '^#(([0-9a-fA-F]){3}){1,2}$' > /dev/null
      then
-      echo "Background set to '$image'"
+      echo "Background set to color '$image'"
       currentBackground="$image"
       saveCurrentBackground
     else
