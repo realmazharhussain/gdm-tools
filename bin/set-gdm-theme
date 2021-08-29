@@ -729,6 +729,10 @@ set-custom-theme() {
   cp $tempThemeDir/$gresource "$gdmGresourceFile"
   set-alternatives
   echo "Theme set to '$theme'"
+  eval local GNOME_SHELL_THEME=$(gsettings get org.gnome.shell.extensions.user-theme name 2>/dev/null)
+  if [ "$XDG_CURRENT_DESKTOP" = GNOME ] && [ "$GNOME_SHELL_THEME" = '' ]; then
+    echo "Please, Log Out and Log In again!"
+  fi
 }
 
 set-default-theme() {
