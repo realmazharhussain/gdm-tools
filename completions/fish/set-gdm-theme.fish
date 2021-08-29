@@ -26,5 +26,5 @@ complete -f -c set-gdm-theme -n "not __fish_seen_subcommand_from $all_subcmds" -
 complete -f -c set-gdm-theme -n "not __fish_seen_subcommand_from $all_subcmds" -a "examples" -d "Show command examples"
 complete -f -c set-gdm-theme -n "not __fish_seen_subcommand_from $all_subcmds" -s e -d "Show command examples"
 complete -c set-gdm-theme -n "not __fish_seen_subcommand_from $all_subcmds" -a "extract" -d "Extract default theme"
-complete -c set-gdm-theme -n "not __fish_seen_subcommand_from $all_subcmds" -s e -d "Extract default theme"
+complete -c set-gdm-theme -n "not __fish_seen_subcommand_from $all_subcmds" -s x -d "Extract default theme"
 
