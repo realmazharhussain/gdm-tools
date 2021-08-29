@@ -457,12 +457,14 @@ man $ProgName
 }
 
 pagedHelp() {
-  if [ -x "$(which $PAGER)" ];then
+  if [ -x "$(which $PAGER 2>/dev/null)" ];then
     $1 | $PAGER
-  elif which most > /dev/null; then
-    $1 | most
-  else
+  elif type less &> /dev/null; then
     $1 | less
+  elif type more &> /dev/null; then
+    $1 | more
+  else
+    $1
   fi
 }
 
