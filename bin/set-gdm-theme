@@ -691,13 +691,13 @@ set-background-image() {
   if [ -n "$image" ]; then
     if [ "$image" = none ]; then
       rm -f $gdmBackground
-      echo "Background image set to 'none'"
+      echo "Background set to 'none'"
       currentBackground="$image"
       saveCurrentBackground
     elif [ -f "$image" ]; then
       if file -b --mime-type "$image" | grep image/.* > /dev/null ; then
         cp "$image" $gdmBackground
-        echo "Background image set to '$image'"
+        echo "Background set to image '$image'"
         currentBackground=image
         saveCurrentBackground
       else
