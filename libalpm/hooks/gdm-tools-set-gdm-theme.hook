@@ -1,0 +1,10 @@
+[Trigger]
+Type = Path
+Operation = Install
+Operation = Upgrade
+Target = usr/share/gnome-shell/gnome-shell-theme.gresource
+
+[Action]
+Description = Re-applying GDM theme and background...
+When = PostTransaction
+Exec = /usr/share/libalpm/scripts/gdm-tools-set-gdm-theme

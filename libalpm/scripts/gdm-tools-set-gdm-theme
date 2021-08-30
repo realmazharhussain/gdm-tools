@@ -1,0 +1,6 @@
+#!/bin/bash
+currentThemeFile=/etc/gdm-tools/currentTheme                # File to store name of the current GDM theme
+currentBackgroundFile=/etc/gdm-tools/currentBackground      # File to store type of the current GDM background
+if [ -f $currentThemeFile ] || [ -f $currentBackgroundFile ]; then
+   set-gdm-theme set --background
+fi
