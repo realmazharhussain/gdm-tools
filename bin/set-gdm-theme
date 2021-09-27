@@ -698,6 +698,7 @@ set-background-image() {
       saveCurrentBackground
     elif [ -f "$image" ]; then
       if file -b --mime-type "$image" | grep image/.* > /dev/null ; then
+        mkdir -p "$gnomeShellDir"/theme
         cp "$image" $gdmBackground
         echo "Background set to image '$image'"
         currentBackground=image
@@ -732,9 +733,9 @@ set-custom-theme() {
   set-alternatives
   echo "Theme set to '$theme'"
   #eval local GNOME_SHELL_THEME=$(gsettings get org.gnome.shell.extensions.user-theme name 2>/dev/null)
-  if [ "$XDG_CURRENT_DESKTOP" = GNOME ]; then
-    echo "Please, Log Out and Log In again!"
-  fi
+  #if [ "$XDG_CURRENT_DESKTOP" = GNOME ]; then
+  #  echo "Please, Log Out and Log In again!"
+  #fi
 }
 
 set-default-theme() {
