@@ -16,7 +16,8 @@ setVars(){
   declare -g tempExtractedDir=$tempDir/extracted      # Directory to temprarily store theme files extracted from some gresource file
   declare -g gnomeShellDir=/usr/share/gnome-shell     # Directory that contains gnome-shell and GDM related files
   declare -g gdmGresourceFile=$gnomeShellDir/gnome-shell-theme.gresource # Gresource file to be used by GDM
-  declare -g ubuntuGresourceFile=$gnomeShellDir/gdm3-theme.gresource     # Gresource file to be used by GDM on Ubuntu and derivatives
+  declare -g ubuntuGresourceFile=$gnomeShellDir/gdm-theme.gresource     # Gresource file to be used by GDM on Ubuntu and derivatives
+  declare -g ubuntuGresourceFile_Old=$gnomeShellDir/gdm3-theme.gresource # Gresource file to be used by GDM on Ubuntu (21.04 and older) and derivatives
   declare -g gdmGresourceManualBackup=$gdmGresourceFile.bak              # Manual Backup of distro default or official GDM gresource file
   declare -g gdmGresourceAutoBackup=$gdmGresourceFile.default            # Automatic Backup of original/default GDM gresource file
   declare -g deprecatedGresourceBackups=$gdmGresourceFile.original       # Files that were previously used as backup but now they don't
@@ -594,7 +595,8 @@ reset() {
   if [ -f "$backupFile" ]; then
     mv "$backupFile" "$gdmGresourceFile"
   fi
-  [ -f $ubuntuGresourceFile ] && update-alternatives --auto gdm3-theme.gresource
+  [ -f $ubuntuGresourceFile_Old ] && update-alternatives --auto gdm3-theme.gresource
+  [ -f $ubuntuGresourceFile ] && update-alternatives --auto gdm-theme.gresource
   rm -f $gdmBackground $currentThemeFile $currentBackgroundFile
   echo "Everything reset to default values"
 }
@@ -613,6 +615,7 @@ compile() {
     cat "$customCSS" >> $tempThemeDir/gnome-shell.css
   fi
   cp $tempThemeDir/gnome-shell.css $tempThemeDir/gdm3.css
+  cp $tempThemeDir/gnome-shell.css $tempThemeDir/gdm.css
   touch $tempThemeDir/$customThemeIdentity
   # Generate gresource xml file for current theme
   local file resourceFiles=$(find ${tempThemeDir} -type f | sed "s|$tempThemeDir||" | cut -c 2- | while read file; do echo "<file>$file</file>"; done)
@@ -722,7 +725,8 @@ set-background-image() {
 }
 
 set-alternatives() {
-  [ -f $ubuntuGresourceFile ] &&   update-alternatives --set gdm3-theme.gresource $gdmGresourceFile
+  [ -f $ubuntuGresourceFile_Old ] && update-alternatives --set gdm3-theme.gresource $gdmGresourceFile
+  [ -f $ubuntuGresourceFile ] && update-alternatives --set gdm-theme.gresource $gdmGresourceFile
 }
 
 set-custom-theme() {
