@@ -65,6 +65,12 @@ getValues(){
                clock-show-weekday
                clock-format'
 
+  printValues 'Sound' 'org/gnome/desktop/sound'\
+              'theme-name
+               event-sounds
+               input-feedback-sounds
+               allow-volume-above-100-percent'
+
 #  printValues 'Login Screen' 'org/gnome/login-screen'\
 #              'logo
 #               disable-user-list
