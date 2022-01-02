@@ -618,26 +618,14 @@ compile() {
   cp $tempThemeDir/gnome-shell.css $tempThemeDir/gdm.css
   touch $tempThemeDir/$customThemeIdentity
   # Generate gresource xml file for current theme
-  local file resourceFiles
-  while read file; do
-    rpath=${file/$tempThemeDir\//}
-    resourceFiles+=("$rpath")
-  done <<<$(find ${tempThemeDir} -type f)
-  local -A resourceAliases
-  while read file; do
-    rpath=${file/$tempThemeDir\//}
-    resourceAliases["$(readlink $file)"]="$rpath"
-  done <<<$(find ${tempThemeDir} -type l)
   { echo '<?xml version="1.0" encoding="UTF-8"?>'
     echo '<gresources>'
     echo ' <gresource prefix="/org/gnome/shell/theme">'
-    for file in "${resourceFiles[@]}"; do
-       if test -n "${resourceAliases[$file]}"; then
-          echo "  <file alias=\"${resourceAliases[$file]}\">$file</file>"
-       else
-          echo "  <file>$file</file>"
-       fi
-    done
+    local file
+    while read file; do
+      rpath=${file/"$tempThemeDir/"/}
+      echo "  <file>$rpath</file>"
+    done <<<$(find ${tempThemeDir} -type f,l)
     echo ' </gresource>'
     echo '</gresources>'
   } > $tempThemeDir/$gresource.xml
