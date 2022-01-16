@@ -209,6 +209,9 @@ setVars(){
   elif [ "$defaultGresource" != "$gdmGresourceFile" ]; then
     declare -g customDefaultGresource=true
   fi
+
+  # Overlay mode
+  declare -g overlayMode=${overlayMode:-resources}
 }
 
 getCurrentTheme(){
@@ -606,7 +609,43 @@ compile() {
   if [[ ! -z "$targetThemeShellDir" && -d "$targetThemeShellDir" ]]; then
     rm -rf $tempThemeDir
     mkdir -p $tempThemeDir
-    cp -r "$targetThemeShellDir"/* $tempThemeDir
+    case $overlayMode in
+      none)
+        cp -r "$targetThemeShellDir"/* $tempThemeDir
+        ;;
+      resources)
+        if [[ "$theme" != 'default' ]]; then
+          extract $(getDefaultGresource)
+          cp -rT "$tempExtractedDir" "$tempThemeDir"
+        fi
+        cp -r "$targetThemeShellDir"/* $tempThemeDir
+        ;;
+      full)
+        if [[ "$theme" != 'default' ]]; then
+          extract $(getDefaultGresource)
+          for cssFileName in pad-osd gnome-shell{,-high-contrast}; do
+            mv "$tempExtractedDir"/${cssFileName}{,-default}.css
+          done
+          cp -rT "$tempExtractedDir" "$tempThemeDir"
+          cp -rT "$targetThemeShellDir" $tempThemeDir
+          for cssFileName in pad-osd gnome-shell{,-high-contrast}; do
+            if [ -r "$tempThemeDir"/${cssFileName}.css ]; then
+              cat "$tempThemeDir"/${cssFileName}.css >> "$tempThemeDir"/${cssFileName}-default.css
+            fi
+            mv "$tempThemeDir"/${cssFileName}{-default,}.css
+          done
+        else
+          cp -r "$targetThemeShellDir"/* $tempThemeDir
+        fi
+        ;;
+      *)
+        { echo "overlayMode '$overlayMode' not supported!"
+          echo "Please! set overlayMode in configuration file to an appropriate value:"
+          echo "    none, resources, full"
+        } >&2
+        exit 1
+        ;;
+    esac
   else
     return 1
   fi
