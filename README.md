@@ -37,7 +37,11 @@ Before installing this program, make sure you have installed all the dependencie
 
 ### Method 1:
 
-Download it in zip format by clicking on green 'Code' button on upper right corner of this page and then clicking on 'Download ZIP'. Extract it somewhere on your system. Open the extracted folder in terminal, type `./install` and press Enter. Now type your password and press Enter.
+1. Download the [zip file](https://github.com/realmazharhussain/gdm-tools/archive/refs/heads/main.zip) (or [tar.gz file](https://github.com/realmazharhussain/gdm-tools/archive/refs/heads/main.tar.gz))
+2. Extract it somewhere on your system
+3. Open the extracted folder in terminal
+4. Type `./install` and press Enter
+5. Now type your password and press Enter.
 
 ### Method 2:
 
@@ -46,7 +50,7 @@ First, make sure you have installed git. On Debian-like systems that can be done
 Then, run following commands in terminal.
 
 ```bash
-git clone --depth=1 https://github.com/realmazharhussain/gdm-tools.git
+git clone --depth=1 --single-brach https://github.com/realmazharhussain/gdm-tools.git
 cd gdm-tools
 ./install.sh
 ```
