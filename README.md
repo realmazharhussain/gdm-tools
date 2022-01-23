@@ -27,12 +27,12 @@ This is a command-line program which provides a nice interface to set GDM theme 
 
 ## Arch Linux and Arch-Based distros
 
-This program is available as [gdm-tools-git](https://aur.archlinux.org/packages/gdm-tools-git) in the AUR. Use your favourite AUR helper to install it.
+This program is available as [gdm-tools](https://aur.archlinux.org/packages/gdm-tools) and [gdm-tools-git](https://aur.archlinux.org/packages/gdm-tools-git) in the AUR. Use your favourite AUR helper to install it.
 
 **Example:**
 
 ```bash
-yay -S gdm-tools-git
+yay -S gdm-tools
 ```
 
 ## Others
