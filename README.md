@@ -1,3 +1,7 @@
+### Announcement!
+
+Alpha version of the '[**Login Settings**](https://github.com/realmazharhussain/gdm-settings)' app has been released. It is a GUI alternative to '**gdm-tools**'.
+
 # gdm-tools
 
 This is a set of tools for Gnome's Display/Login Manager (GDM).
