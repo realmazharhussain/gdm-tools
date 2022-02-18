@@ -230,13 +230,7 @@ saveCurrentTheme(){
 
 getCurrentBackground(){
   declare -g currentBackground="$(cat "$currentBackgroundFile" 2>/dev/null)"
-  if [ -z "$currentBackground" ]; then
-    if [ -f $gdmBackground ]; then
-      currentBackground=image
-    else
-      currentBackground=none
-    fi
-  fi
+  [ -z "$currentBackground" ] && currentBackground=none
 }
 
 printCurrentBackground(){
@@ -245,7 +239,6 @@ printCurrentBackground(){
 }
 
 saveCurrentBackground(){
-  [ -z "$currentBackground" ] && CurrentBackground=default
   printCurrentBackground > "$currentBackgroundFile"
 }
 
@@ -264,13 +257,11 @@ printBackgroundCSS(){
 }"
 
 
-  case "$currentBackground" in
-   (none)
-   ;;
+  case "$(background-type "$currentBackground")" in
    (image)
      echo "$imgBgr"
    ;;
-   (*)
+   (color)
      echo "$colorBgr"
    ;;
   esac
@@ -732,35 +723,52 @@ list() {
   done
 }
 
-set-background() {
-  if [ -n "$image" ]; then
-    if [ "$image" = none ]; then
-      echo "Background set to 'none'"
-      currentBackground="$image"
-      saveCurrentBackground
-    elif [ -f "$image" ]; then
-      if file -b --mime-type "$image" | grep image/.* > /dev/null ; then
-        mkdir -p "$tempThemeDir"
-        cp "$image" "$tempThemeDir"/background
-        echo "Background set to image '$image'"
-        currentBackground=image
-        saveCurrentBackground
-      else
-        echo "'$image' is not an image file" > /dev/stderr
-        return 1
-      fi
-    elif contains "$image" "${colorNames[@]}" ||
-         echo "$image" | grep -E '^#(([0-9a-fA-F]){3}){1,2}$' > /dev/null
-     then
-      echo "Background set to color '$image'"
-      currentBackground="$image"
-      saveCurrentBackground
+background-type() {
+  if [ "$1" = none ]; then
+    echo "none"
+  elif [ -f "$1" ]; then
+    if file -b --mime-type "$1" | grep image/.* > /dev/null ; then
+      echo "image"
     else
-      echo "image '$image' not found" > /dev/stderr
-      echo "GDM background was not changed" > /dev/stderr
-      return 10
+      echo "invalid-file-type"
     fi
+  elif contains "$1" "${colorNames[@]}" ||
+       echo "$1" | grep -E '^#(([0-9a-fA-F]){3}){1,2}$' > /dev/null
+  then
+    echo "color"
+  else
+    echo "invalid"
   fi
+}
+
+set-background() {
+  background=${image:-$currentBackground}
+  case "$(background-type "$background")" in
+  none)
+    echo "Background set to 'none'"
+    ;;
+  image)
+    cp "$background" "$tempThemeDir"/background
+    echo "Background set to image '$background'"
+    ;;
+  invalid-file-type)
+    echo "'$background' is not an image file" > /dev/stderr
+    status=1
+    ;;
+  color)
+    echo "Background set to color '$background'"
+    ;;
+  invalid)
+    echo "image '$background' not found" > /dev/stderr
+    echo "GDM background was not changed" > /dev/stderr
+    status=10
+    ;;
+  esac
+  if [ "$status" != 10 ]; then
+    currentBackground="$background"
+    saveCurrentBackground
+  fi
+  return ${status:-0}
 }
 
 set-alternatives() {
