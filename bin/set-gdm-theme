@@ -22,7 +22,6 @@ setVars(){
   declare -g gdmGresourceAutoBackup=$gdmGresourceFile.default            # Automatic Backup of original/default GDM gresource file
   declare -g deprecatedGresourceBackups=$gdmGresourceFile.original       # Files that were previously used as backup but now they don't
   declare -g distroDefaultGresourceFile=$gdmGresourceFile.distro-default # File to store distro default gresource file
-  declare -g gdmBackground=$gnomeShellDir/theme/gdm-background           # File to be used as GDM background
   declare -g currentThemeFile=/etc/gdm-tools/currentTheme                # File to store name of the current GDM theme
   declare -g currentBackgroundFile=/etc/gdm-tools/currentBackground      # File to store type of the current GDM background
   declare -g gdm3css=/etc/alternatives/gdm3.css      # Symlink used by update-alternatives program to provide gdm3.css file
@@ -253,7 +252,7 @@ saveCurrentBackground(){
 printBackgroundCSS(){
   imgBgr="
 #lockDialogGroup {
-  background-image: url('file://$gdmBackground');
+  background-image: url('resource:///org/gnome/shell/theme/background');
   background-size: cover;
   background-repeat: no-repeat;
   background-attachment: fixed;
@@ -261,7 +260,7 @@ printBackgroundCSS(){
 }"
   colorBgr="
 #lockDialogGroup {
-  background: $currentBackground;
+  background-color: $currentBackground;
 }"
 
 
@@ -269,12 +268,10 @@ printBackgroundCSS(){
    (none)
    ;;
    (image)
-    if [ -f "$gdmBackground" ]; then
-      echo "$imgBgr"
-    fi
+     echo "$imgBgr"
    ;;
    (*)
-    echo "$colorBgr"
+     echo "$colorBgr"
    ;;
   esac
 }
@@ -649,6 +646,7 @@ compile() {
   else
     return 1
   fi
+  set-background
   printBackgroundCSS >> $tempThemeDir/gnome-shell.css
   if [ -f "$customCSS" ]; then
     cat "$customCSS" >> $tempThemeDir/gnome-shell.css
@@ -734,17 +732,16 @@ list() {
   done
 }
 
-set-background-image() {
+set-background() {
   if [ -n "$image" ]; then
     if [ "$image" = none ]; then
-      rm -f $gdmBackground
       echo "Background set to 'none'"
       currentBackground="$image"
       saveCurrentBackground
     elif [ -f "$image" ]; then
       if file -b --mime-type "$image" | grep image/.* > /dev/null ; then
-        mkdir -p "$gnomeShellDir"/theme
-        cp "$image" $gdmBackground
+        mkdir -p "$tempThemeDir"
+        cp "$image" "$tempThemeDir"/background
         echo "Background set to image '$image'"
         currentBackground=image
         saveCurrentBackground
@@ -773,7 +770,6 @@ set-alternatives() {
 
 set-custom-theme() {
   local targetThemeShellDir="$1"
-  set-background-image
   compile "$targetThemeShellDir"
   cp $tempThemeDir/$gresource "$gdmGresourceFile"
   set-alternatives
