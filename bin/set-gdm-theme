@@ -230,7 +230,14 @@ saveCurrentTheme(){
 
 getCurrentBackground(){
   declare -g currentBackground="$(cat "$currentBackgroundFile" 2>/dev/null)"
-  [ -z "$currentBackground" ] && currentBackground=none
+  case "$currentBackground" in
+  'image')
+    currentBackground=/usr/share/gnome-shell/theme/gdm-background
+    ;;
+  '')
+    currentBackground=none
+    ;;
+  esac
 }
 
 printCurrentBackground(){
