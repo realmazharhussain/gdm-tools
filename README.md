@@ -54,7 +54,7 @@ First, make sure you have installed git. On Debian-like systems that can be done
 Then, run following commands in terminal.
 
 ```bash
-git clone --depth=1 --single-brach https://github.com/realmazharhussain/gdm-tools.git
+git clone --depth=1 --single-branch https://github.com/realmazharhussain/gdm-tools.git
 cd gdm-tools
 ./install.sh
 ```
