@@ -1,6 +1,6 @@
 ### Announcement!
 
-Alpha version of the '[**Login Manager Settings**](https://github.com/realmazharhussain/gdm-settings)' app has been released. It is a GUI alternative to '**gdm-tools**'.
+'[**Login Manager Settings**](https://github.com/realmazharhussain/gdm-settings)' app is a GUI alternative to '**gdm-tools**' with much more settings.
 
 # gdm-tools
 
