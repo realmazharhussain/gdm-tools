@@ -75,7 +75,6 @@ if [ $UID = '0' ] || [ "$rootNeeded" = false ] ; then
   mkdir -p "$binDir" "$manDir"/man1 "$fishComp" "$confDir"
   gzip -fk "$currentDir"/man1/*
   mv -f "$currentDir"/man1/*.gz "$manDir"/man1/
-  chmod +x "$currentDir"/bin/*
   install -Dm755 "$currentDir"/bin/* "$binDir"/
   cp "$currentDir"/completions/fish/* "$fishComp"/
   cp -i "$currentDir"/config/* "$confDir"/
