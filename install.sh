@@ -72,13 +72,15 @@ fi
 
 if [ $UID = '0' ] || [ "$rootNeeded" = false ] ; then
   echo 'installing gdm-tools ...'
+  echo ''
   mkdir -p "$binDir" "$manDir"/man1 "$fishComp" "$confDir"
   gzip -fk "$currentDir"/man1/*
-  mv -f "$currentDir"/man1/*.gz "$manDir"/man1/
-  install -Dm755 "$currentDir"/bin/* "$binDir"/
-  cp "$currentDir"/completions/fish/* "$fishComp"/
-  cp -i "$currentDir"/config/* "$confDir"/
-  echo done.
+  mv -vf "$currentDir"/man1/*.gz "$manDir"/man1/
+  install -vDm755 "$currentDir"/bin/* "$binDir"/
+  install -vDm644 "$currentDir"/completions/fish/* "$fishComp"/
+  cp -vi "$currentDir"/config/* "$confDir"/
+  echo ''
+  echo 'done.'
 else
   sudo --preserve-env=DESTDIR,PREFIX "$0" "$@"
 fi
