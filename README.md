@@ -160,7 +160,7 @@ set-gdm-theme extract
 
 ## Contribute
 
-If you like the project and want to contribute, you can do so by providing feedback or directly contributing code to it. To provide feedback, you can open an issue on github. If you don't know how to do that you can email me directly at mmazharhussainkgb1145@gmail.com.
+If you like the project and want to contribute, you can do so by providing feedback or directly contributing code to it. To provide feedback, you can open an issue on github. If you don't know how to do that you can email me directly at realmazharhussain@gmail.com.
 
 You can also contribute on [Patreon](https://www.patreon.com/mazharhussain).
 
