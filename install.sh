@@ -81,5 +81,5 @@ if [ $UID = '0' ] || [ "$rootNeeded" = false ] ; then
   cp -i "$currentDir"/config/* "$confDir"/
   echo done.
 else
-  sudo --preserve-env=DESTDIR,PREFIX "$0"
+  sudo --preserve-env=DESTDIR,PREFIX "$0" "$@"
 fi
