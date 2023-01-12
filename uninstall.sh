@@ -44,6 +44,10 @@ installedFiles=(
 	)
 
 configFiles=(
+	"$confDir"/custom.css
+	"$confDir"/set-gdm-theme.conf
+
+	# Legacy config files
 	"$confDir"/{set-,}gdm-theme
 )
 
