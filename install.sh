@@ -9,11 +9,14 @@ fishComp="$(realpath -m "$DESTDIR"/"$PREFIX"/share/fish/vendor_completions.d)"
 confDir="$(realpath -m "$DESTDIR"/etc/gdm-tools)"
 
 helpMsg(){
-  echo "Usage: [VAR]=[val]... ./install.sh"
-  echo "OR Usage: ./install.sh"
-  echo "This script respects two Environment Variables; DESTDIR, PREFIX."
-  echo -e "DESTDIR\t\tTarget Root Directory"
-  echo -e "PREFIX\t\tInstall Prefix e.g. /usr or /usr/local"
+  echo "Usage: ./install.sh [OPTION]"
+  echo ""
+  echo "Options"
+  echo "  -h, --help    Show this help message"
+  echo ""
+  echo "Environment Variables"
+  echo "  DESTDIR       Target Root Directory"
+  echo "  PREFIX        Install Prefix e.g. /usr, /usr/local or ~/.local"
 }
 
 case "$1" in
