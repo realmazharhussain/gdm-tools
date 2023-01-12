@@ -8,11 +8,14 @@ manDir="$(realpath -m "$DESTDIR"/"$PREFIX"/man)"
 fishComp="$(realpath -m "$DESTDIR"/"$PREFIX"/share/fish/vendor_completions.d)"
 confDir="$(realpath -m "$DESTDIR"/etc/gdm-tools)"
 
+NoAsk=false
+
 helpMsg(){
   echo "Usage: ./install.sh [OPTION]"
   echo ""
   echo "Options"
   echo "  -h, --help    Show this help message"
+  echo "  --no-ask      Perform a non-interactive install"
   echo ""
   echo "Environment Variables"
   echo "  DESTDIR       Target Root Directory"
@@ -24,6 +27,9 @@ case "$1" in
     helpMsg
     exit
   ;;
+  --no-ask)
+    NoAsk=true
+  ;;
   '')
     echo -n
   ;;
@@ -32,6 +38,14 @@ case "$1" in
     exit 1
   ;;
 esac
+
+if $NoAsk; then
+  AptOptions='-y'
+  PacmanOptions='--noconfirm'
+  CpOptions='-n'
+else
+  CpOptions='-i'
+fi
 
 depMsg() {
     echo "This script needs '$depName' in order to work. But it is not installed." > /dev/stderr
@@ -44,9 +58,9 @@ if ! which glib-compile-resources gresource &> /dev/null; then
   depName='GLib (developer edition)'
   pkgNames="'glib2', 'glib2-devel', 'libglib2.0-dev', or straight up 'glib', etc. "
   if which apt &> /dev/null; then
-    sudo apt install libglib2.0-dev || depMsg
+    sudo apt install $AptOptions libglib2.0-dev || depMsg
   elif which pacman &> /dev/null; then
-    sudo pacman -S glib2 || depMsg
+    sudo pacman -S $PacmanOptions glib2 || depMsg
   else
     depMsg
   fi
@@ -56,9 +70,9 @@ if ! which dconf &> /dev/null; then
   depName='DConf (CommandLine Version)'
   pkgNames="'dconf-cli', or 'dconf'"
   if which apt &> /dev/null; then
-    sudo apt install dconf-cli || depMsg
+    sudo apt install $AptOptions dconf-cli || depMsg
   elif which pacman &> /dev/null; then
-    sudo pacman -S dconf || depMsg
+    sudo pacman -S $PacmanOptions dconf || depMsg
   else
     depMsg
   fi
@@ -78,7 +92,7 @@ if [ $UID = '0' ] || [ "$rootNeeded" = false ] ; then
   mv -vf "$currentDir"/man1/*.gz "$manDir"/man1/
   install -vDm755 "$currentDir"/bin/* "$binDir"/
   install -vDm644 "$currentDir"/completions/fish/* "$fishComp"/
-  cp -vi "$currentDir"/config/* "$confDir"/
+  cp -v $CpOptions "$currentDir"/config/* "$confDir"/
   echo ''
   echo 'done.'
 else
