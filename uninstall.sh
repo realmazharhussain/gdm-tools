@@ -47,6 +47,8 @@ configFiles=(
 	"$confDir"/{set-,}gdm-theme
 )
 
+dir1ToCheck="$(realpath -m "$DESTDIR")"
+dir2ToCheck="$(realpath -m "$PREFIX")"
 if [ -d "$DESTDIR"/"$PREFIX" ]; then
   if [ -w "$dir1ToCheck" ] && [ -w "$dir1ToCheck"/"$dir2ToCheck" ]; then
   rootNeeded=false
