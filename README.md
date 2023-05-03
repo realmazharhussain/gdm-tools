@@ -1,12 +1,17 @@
-### Announcement!
-
-'[**GDM Settings**](https://gdm-settings.github.io)' app is a GUI alternative to '**gdm-tools**' with much more settings.
-
 # gdm-tools
 
 This is a set of tools for Gnome's Display/Login Manager (GDM).
 
 Currently, it includes only 'set-gdm-theme' tool and 'gnomeconf2gdm'.
+
+### Caution!
+
+**gdm-tools** is not being actively maintained anymore. There may be '*small*' bug fixes and other
+changes here and there but don't expect any new features or even bug fixes if they require too much
+fiddling around in the code.
+
+"[**GDM Settings**](https://gdm-settings.github.io)" app is a GUI alternative to gdm-tools. It is
+being actively maintained and has much more settings and customization options.
 
 ## gnomeconf2gdm
 
