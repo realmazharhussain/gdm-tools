@@ -1,6 +1,6 @@
 ### Announcement!
 
-'[**Login Manager Settings**](https://realmazharhussain.github.io/gdm-settings)' app is a GUI alternative to '**gdm-tools**' with much more settings.
+'[**GDM Settings**](https://gdm-settings.github.io)' app is a GUI alternative to '**gdm-tools**' with much more settings.
 
 # gdm-tools
 
