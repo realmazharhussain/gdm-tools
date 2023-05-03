@@ -10,7 +10,7 @@ Currently, it includes only 'set-gdm-theme' tool and 'gnomeconf2gdm'.
 changes here and there but don't expect any new features or even bug fixes if they require too much
 fiddling around in the code.
 
-"[**GDM Settings**](https://gdm-settings.github.io)" app is a GUI alternative to gdm-tools. It is
+[**GDM Settings**](https://gdm-settings.github.io) app is a GUI alternative to gdm-tools. It is
 being actively maintained and has much more settings and customization options.
 
 ## gnomeconf2gdm
