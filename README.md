@@ -4,7 +4,7 @@ This is a set of tools for Gnome's Display/Login Manager (GDM).
 
 Currently, it includes only 'set-gdm-theme' tool and 'gnomeconf2gdm'.
 
-### Caution!
+### Caution!!!
 
 **gdm-tools** is not being actively maintained anymore. There may be '*small*' bug fixes and other
 changes here and there but don't expect any new features or even bug fixes if they require too much
