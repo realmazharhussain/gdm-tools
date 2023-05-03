@@ -60,10 +60,16 @@ printValues() {
 getValues(){
   printValues 'Interface' 'org/gnome/desktop/interface'\
               'cursor-theme
+               cursor-size
                icon-theme
                show-battery-percentage
+               clock-show-seconds
                clock-show-weekday
-               clock-format'
+               clock-format
+               font-name
+               font-antialiasing
+               font-hinting
+               text-scaling-factor'
 
   printValues 'Sound' 'org/gnome/desktop/sound'\
               'theme-name
@@ -78,9 +84,17 @@ getValues(){
 #               banner-message-enable
 #               banner-message-text'
 
+  printValues 'Mouse' 'org/gnome/desktop/peripherals/mouse'\
+              'speed
+               natural-scroll
+               accel-profile'
+
   printValues 'Touchpad' 'org/gnome/desktop/peripherals/touchpad'\
               'speed
-               tap-to-click'
+               tap-to-click
+               natural-scroll
+               two-finger-scrolling-enabled
+               disable-while-typing'
 
   printValues 'Night Light' 'org/gnome/settings-daemon/plugins/color'\
               'night-light-enabled
